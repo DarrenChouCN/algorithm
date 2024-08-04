@@ -15,7 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="arrays\Helloworld.cpp">
+    <ClCompile Include="arrays\TwoSum.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="arrays\MergeSortedArray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
