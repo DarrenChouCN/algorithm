@@ -19,7 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="arrays\ElementAppearingCount.cpp" />
+    <ClCompile Include="arrays\FindAllNumbersDisappeared.cpp" />
+    <ClCompile Include="arrays\MaxAverageSubarray.cpp" />
+    <ClCompile Include="arrays\MaxConsecutiveOnes.cpp" />
     <ClCompile Include="arrays\MergeSortedArray.cpp" />
+    <ClCompile Include="arrays\MissingRanges.cpp" />
+    <ClCompile Include="arrays\PlusOne.cpp" />
+    <ClCompile Include="arrays\SmallestEqualIndex.cpp" />
+    <ClCompile Include="arrays\SummaryRanges.cpp" />
     <ClCompile Include="arrays\TwoSum.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

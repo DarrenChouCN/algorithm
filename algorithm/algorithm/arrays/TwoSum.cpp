@@ -22,6 +22,7 @@ Space Complexity: O(N)
 #include <vector>
 #include <unordered_map>
 #include <iostream>
+
 using namespace std;
 
 class TwoSum {
@@ -40,7 +41,7 @@ public:
 	}
 };
 
-int main1() {
+int mainTwoSum() {
 	auto printResult = [](vector<int> result) {
 		if (!result.empty()) {
 			cout << "Index:" << result[0] << "," << result[1] << endl;
