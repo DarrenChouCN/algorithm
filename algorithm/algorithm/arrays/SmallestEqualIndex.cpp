@@ -23,7 +23,7 @@ int smallestEqual(vector<int>& nums) {
     return -1;
 }
 
-int main() {
+int mainSmallestEqual() {
     vector<int> nums1 = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
     cout << "Test Case 1: " << smallestEqual(nums1) << endl; // Should output 0
 

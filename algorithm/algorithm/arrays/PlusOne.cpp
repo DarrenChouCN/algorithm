@@ -12,7 +12,7 @@ Increment the large integer by one and return the resulting array of digits.
 3. If the current element pointed to is 9, change it to 0 and move the pointer one position to the left. If the first element of the array is still 9 after the traversal, change it to 0 and add a 1 at the beginning of the array.
 
 Time Complexity: O(N)
-Space Complexity: O(1) or O(N) (if a new array is created)
+Space Complexity: O(1) or O(N)
 */
 
 #include <vector>
