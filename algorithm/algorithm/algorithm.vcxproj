@@ -21,17 +21,24 @@
   <ItemGroup>
     <ClCompile Include="arrays\ElementAppearingCount.cpp" />
     <ClCompile Include="arrays\FindAllNumbersDisappeared.cpp" />
-    <ClCompile Include="arrays\MaxAverageSubarray.cpp" />
+    <ClCompile Include="arrays\KthLargestElement.cpp" />
+    <ClCompile Include="arrays\SlidingWindow.cpp" />
     <ClCompile Include="arrays\MaxConsecutiveOnes.cpp" />
+    <ClCompile Include="arrays\MaxContainer.cpp" />
+    <ClCompile Include="arrays\MergeAndInsertIntervals.cpp" />
     <ClCompile Include="arrays\MergeSortedArray.cpp" />
     <ClCompile Include="arrays\MissingRanges.cpp" />
     <ClCompile Include="arrays\NewPermutation.cpp" />
+    <ClCompile Include="arrays\NonDecreasingArray.cpp" />
     <ClCompile Include="arrays\PlusOne.cpp" />
+    <ClCompile Include="arrays\BinarySearch.cpp" />
+    <ClCompile Include="arrays\RotateImage.cpp" />
     <ClCompile Include="arrays\SmallestEqualIndex.cpp" />
     <ClCompile Include="arrays\SubarraySumEqualsK.cpp" />
     <ClCompile Include="arrays\Sum3And4.cpp" />
     <ClCompile Include="arrays\SummaryRanges.cpp" />
     <ClCompile Include="arrays\Sum2.cpp" />
+    <ClCompile Include="arrays\ValidSudoku.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

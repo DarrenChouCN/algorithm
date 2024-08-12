@@ -1,3 +1,7 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
 /*
 Maximum Average Subarray ¢ñ
 
@@ -17,10 +21,6 @@ Time Complexity: O(N)
 Space Complexity: O(1)
 */
 
-#include <iostream>
-#include <vector>
-
-using namespace std;
 
 double findMaxAverage(vector<int>& nums, int k) {
 	double maxSum = 0;
@@ -47,6 +47,48 @@ int mainFindMaxAverage() {
 	vector<int> nums2 = { 5, 5, 5, 5, 5, 5 };
 	int k2 = 3;
 	cout << "Test Case 2: " << findMaxAverage(nums2, k2) << endl; // 5.0
+
+	return 0;
+}
+
+/*
+Subarray Product Less Than K
+Given an array of integers nums and an integer k, return the number of contiguous subarrays where the product of all the elements in the subarray is strictly less than k.
+
+1. Use two pointer left and right to define a sliding window. Track the product of elements within thw window using product, and count valid subarrays with count.
+2. Move right pointer across the array, multiplying product by nums[right]. If product>=k, shrink the window by moving left until product<k.
+3. Each valid window contributes right-left+1 subarray. And the total count is returned.
+
+Time Complexity: O(n)
+Space Complexity: O(1)
+*/
+
+int numSubarrayProductLessThanK(vector<int>& nums, int k) {
+	if (k <= 1) return 0;
+	int left = 0, count = 0, product = 1;
+
+	for (int right = 0; right < nums.size(); right++)
+	{
+		product *= nums[right];
+		while (product >= k)
+		{
+			product /= nums[left];
+			left++;
+		}
+
+		count += right - left + 1;
+	}
+
+	return count;
+}
+
+int main() {
+	vector<int> nums = { 10, 5, 2, 6 };
+	int k = 100;
+
+	int result = numSubarrayProductLessThanK(nums, k);
+
+	cout << "The number of subarrays with product less than " << k << " is: " << result << endl;
 
 	return 0;
 }

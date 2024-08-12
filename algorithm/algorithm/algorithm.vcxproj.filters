@@ -36,7 +36,7 @@
     <ClCompile Include="arrays\MaxConsecutiveOnes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\MaxAverageSubarray.cpp">
+    <ClCompile Include="arrays\SlidingWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="arrays\ElementAppearingCount.cpp">
@@ -52,6 +52,27 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="arrays\NewPermutation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="arrays\MaxContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="arrays\BinarySearch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="arrays\MergeAndInsertIntervals.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="arrays\ValidSudoku.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="arrays\RotateImage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="arrays\KthLargestElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="arrays\NonDecreasingArray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
