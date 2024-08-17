@@ -19,9 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="arrays\BitManipulation.cpp" />
+    <ClCompile Include="arrays\CountPrime.cpp" />
     <ClCompile Include="arrays\ElementAppearingCount.cpp" />
     <ClCompile Include="arrays\FindAllNumbersDisappeared.cpp" />
     <ClCompile Include="arrays\KthLargestElement.cpp" />
+    <ClCompile Include="arrays\MajorityElement.cpp" />
     <ClCompile Include="arrays\SlidingWindow.cpp" />
     <ClCompile Include="arrays\MaxConsecutiveOnes.cpp" />
     <ClCompile Include="arrays\MaxContainer.cpp" />
@@ -32,9 +35,9 @@
     <ClCompile Include="arrays\NonDecreasingArray.cpp" />
     <ClCompile Include="arrays\PlusOne.cpp" />
     <ClCompile Include="arrays\BinarySearch.cpp" />
-    <ClCompile Include="arrays\RotateImage.cpp" />
+    <ClCompile Include="arrays\ArrayRotate.cpp" />
     <ClCompile Include="arrays\SmallestEqualIndex.cpp" />
-    <ClCompile Include="arrays\SubarraySumEqualsK.cpp" />
+    <ClCompile Include="arrays\CumulativeProblem.cpp" />
     <ClCompile Include="arrays\Sum3And4.cpp" />
     <ClCompile Include="arrays\SummaryRanges.cpp" />
     <ClCompile Include="arrays\Sum2.cpp" />

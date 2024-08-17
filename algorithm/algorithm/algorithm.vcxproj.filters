@@ -48,7 +48,7 @@
     <ClCompile Include="arrays\Sum3And4.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\SubarraySumEqualsK.cpp">
+    <ClCompile Include="arrays\CumulativeProblem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="arrays\NewPermutation.cpp">
@@ -66,13 +66,22 @@
     <ClCompile Include="arrays\ValidSudoku.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\RotateImage.cpp">
+    <ClCompile Include="arrays\ArrayRotate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="arrays\KthLargestElement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="arrays\NonDecreasingArray.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="arrays\CountPrime.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="arrays\MajorityElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="arrays\BitManipulation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

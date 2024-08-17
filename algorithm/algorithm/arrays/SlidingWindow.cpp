@@ -2,15 +2,51 @@
 #include <vector>
 
 using namespace std;
+
+/*
+Minimum Size Subarray Sum
+Given an array of positive integers nums and a positive integer target, return the minimal length of a subarray whose sum is greater than or equal to target. If there is no such subarray, return 0 instead.
+
+1. Start with two pointers left and right both pointing to the beginning of the array.
+2. Move the right pointer to expand the window, adding the current element to the cumulative sum.
+3. Whenever the sum is greater than or equal to the target, move the left pointer to shrink the window while updating the minimal length of the subarray.
+4. Repeat the above steps until the right pointer reaches the end of the array.
+
+Time Complexity: O(N)
+Space Complexity: O(1)
+*/
+int minSubArrayLen(int target, vector<int>& nums) {
+	int left = 0, sum = 0, minLength = INT_MAX;
+
+	for (int right = 0; right < nums.size(); right++)
+	{
+		sum += nums[right];
+
+		while (sum >= target)
+		{
+			minLength = min(minLength, right - left + 1);
+			sum -= nums[left];
+			left++;
+		}
+	}
+	return minLength == INT_MAX ? 0 : minLength;
+}
+
+int mainMinSubArrayLen() {
+	vector<int> nums = { 2, 3, 1, 2, 4, 3 };
+	int target = 7;
+
+	int result = minSubArrayLen(target, nums);
+	cout << "The minimum length of a subarray with a sum >= " << target << " is: " << result << endl;
+
+	return 0;
+}
+
 /*
 Maximum Average Subarray ¢ñ
 
-You are given an integer array nums consisting of n elements, and an integer k.
+You are given an integer array nums consisting of n elements, and an integer k. Find a contiguous subarray whose length is equal to k that has the maximum average value and return this value. Any answer with a calculation error less than 10-5 will be accepted.
 
-Find a contiguous subarray whose length is equal to k that has the maximum average value and return this value. Any answer with a calculation error less than 10-5 will be accepted.
-*/
-
-/*
 Sliding Window Approach
 1. First, calculate the sum of the first k elements. This sum represents the sum of the initial window.
 2. Starting from the k-th element, slide the window one element at a time to the right. For each new element added to the window, update the window sum by subtracting the element that is left out from the window and adding the new element. This method efficiently updates the current window sum without recalculating the entire sum from scratch.
@@ -20,8 +56,6 @@ Sliding Window Approach
 Time Complexity: O(N)
 Space Complexity: O(1)
 */
-
-
 double findMaxAverage(vector<int>& nums, int k) {
 	double maxSum = 0;
 
@@ -82,7 +116,7 @@ int numSubarrayProductLessThanK(vector<int>& nums, int k) {
 	return count;
 }
 
-int main() {
+int mainNumSubarrayProductLessThanK() {
 	vector<int> nums = { 10, 5, 2, 6 };
 	int k = 100;
 

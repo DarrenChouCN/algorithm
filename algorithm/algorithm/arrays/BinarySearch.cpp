@@ -5,6 +5,65 @@
 using namespace std;
 
 /*
+Find Peak Element
+A peak element is an element that is strictly greater than its neighbors.
+Given a 0-indexed integer array nums, find a peak element, and return its index. If the array contains multiple peaks, return the index to any of the peaks. You must write an algorithm that runs in O(log n) time.
+
+Find the middle element. Decide which half contains the peak and adjust left and right to narrow the search. Finally, left will point to a peak element.
+
+Time Complexity: O(logn)
+Space Complexity: O(1)
+*/
+int findPeakElement(vector<int>& nums) {
+	int left = 0, right = nums.size() - 1;
+
+	while (left < right) {
+		int mid = left + (right - left) / 2;
+
+		if (nums[mid] > nums[mid + 1]) {
+			right = mid; // Peak is on the left side
+		}
+		else {
+			left = mid + 1; // Peak is on the right side
+		}
+	}
+
+	return left; // left points to a peak element
+}
+
+
+/*
+Find Minimum in Rotated Sorted Array
+Suppose an array of length n sorted in ascending order is rotated between 1 and n times. Notice that rotating an array [a[0], a[1], a[2], ..., a[n-1]] 1 time results in the array [a[n-1], a[0], a[1], a[2], ..., a[n-2]].
+Given the sorted rotated array nums of unique elements, return the minimum element of this array. You must write an algorithm that runs in O(log n) time.
+
+1. Since the array is partially sorted, binary search is an optimal approach.
+2. If the middle element 'mid' is greater than the rightmost element 'right', the minimum must be in the right half. If the middle element is less than or equal to the rightmost element, the minimum is in the left half, including possibly 'mid'.
+3. If nums[mid]>nums[right], move the left boundary to mid+1. Otherwise, move the right boundary to mid.
+4. The search terminates when the left pointer converges with the right, pointing to the minimum element.
+
+Time Complexity: O(logn)
+Space Complexity: O(1)
+*/
+int findMin(vector<int>& nums) {
+	int left = 0, right = nums.size() - 1;
+
+	while (left < right) {
+		int mid = left + (right - left) / 2;
+
+		if (nums[mid] > nums[right]) {
+			left = mid + 1;
+		}
+		else {
+			right = mid;
+		}
+	}
+
+	return nums[left];
+}
+
+
+/*
 Find fisrt and last position of element is sorted array
 
 Given an array of integers nums sorted in non-decreasing order, find the starting and ending position of a given target value.
