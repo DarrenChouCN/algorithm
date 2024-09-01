@@ -63,7 +63,7 @@ vector<vector<int>> findRLEArray(const vector<vector<int>>& encoded1, const vect
     return result;
 }
 
-int main() {
+int mainFindRLEArray() {
 	vector<vector<int>> encoded1 = { {1, 3}, {2, 3} };
 	vector<vector<int>> encoded2 = { {6, 3}, {3, 3} };
 

@@ -41,6 +41,7 @@
     <ClCompile Include="arrays\ArrayRotate.cpp" />
     <ClCompile Include="arrays\SmallestEqualIndex.cpp" />
     <ClCompile Include="arrays\CumulativeProblem.cpp" />
+    <ClCompile Include="arrays\SortedTransformedArray.cpp" />
     <ClCompile Include="arrays\Sum3And4.cpp" />
     <ClCompile Include="arrays\SummaryRanges.cpp" />
     <ClCompile Include="arrays\Sum2.cpp" />

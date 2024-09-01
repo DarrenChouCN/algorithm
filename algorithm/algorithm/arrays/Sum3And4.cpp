@@ -1,3 +1,57 @@
+#include<vector>
+#include<algorithm>
+#include<iostream>
+
+using namespace std;
+
+
+/*
+3 Sum Smaller
+Given an array of n integers nums and an integer target, find the number of index triplets i, j, k with 0 <= i < j < k < n that satisfy the condition nums[i] + nums[j] + nums[k] < target.
+
+Approach 1: Binary Search
+
+Approach 2: Two-Pointer Method
+1. After sorting the array, iterate through the array.
+2. For each element in the array, select two other elements by initializing two pointers¡ªone starting at the element immediately after the current element and the other at the end of the array.
+3. If the sum of the three elements is less than the target, due to the sorted nature of the array, all elements between the two pointers satisfy the condition. Thus, the number of valid triplets can be quickly calculated by subtracting the indices of the two pointers. Then, move the left pointer (the one initialized at the next element) to the right.
+4. If the sum is greater than or equal to the target, it means the condition is not satisfied, so the right pointer (the one initialized at the end of the array) is moved to the left.
+
+Time Complexity: O(N^2)
+Space Complexity: O(1)
+*/
+int threeSumSmaller(vector<int>& nums, int target) {
+	sort(nums.begin(), nums.end());
+	int count = 0;
+
+	for (int i = 0; i < nums.size()-2; i++)
+	{
+		int j = i + 1;
+		int k = nums.size() - 1;
+
+		while (j < k) {
+			if (nums[i] + nums[j] + nums[k] < target) {
+				count += k - j;
+				j++;
+			}
+			else
+			{
+				k--;
+			}
+		}
+	}
+	return count;
+}
+
+int mainThreeSumSmaller() {
+	vector<int> nums = { -2, 0, 1, 3 };
+	int target = 2;
+	cout << "Number of triplets: " << threeSumSmaller(nums, target) << endl;
+
+	return 0;
+}
+
+
 /*
 Sum 3
 Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
@@ -15,12 +69,6 @@ Notice that the solution set must not contain duplicate triplets.
 Time Complexity: O(N^2)
 Space Complexity: O(N^2)
 */
-
-#include<vector>
-#include<algorithm>
-#include<iostream>
-
-using namespace std;
 
 vector<vector<int>> threeSumTarget(vector<int>& nums, int target) {
 	vector<vector<int>> result;
