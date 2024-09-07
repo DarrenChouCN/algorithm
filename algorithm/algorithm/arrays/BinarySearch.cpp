@@ -5,6 +5,30 @@
 using namespace std;
 
 /*
+Find the leftmost position in a sorted array where the element is greater than or equal to a given target.
+
+Time Complexity: O(logn)
+Space Complexity: O(1)
+*/
+int binarySearchLeftMost(vector<int>& arr, int target) {
+	int left = 0, right = arr.size() - 1;
+	int result = -1;
+
+	while (left <= right) {
+		int mid = left + (right - left) / 2;
+		if (arr[mid] >= target) {
+			result = mid;
+			right = mid - 1;
+		}
+		else {
+			left = mid + 1;
+		}
+	}
+	return result;
+}
+
+
+/*
 Find Peak Element
 A peak element is an element that is strictly greater than its neighbors.
 Given a 0-indexed integer array nums, find a peak element, and return its index. If the array contains multiple peaks, return the index to any of the peaks. You must write an algorithm that runs in O(log n) time.
