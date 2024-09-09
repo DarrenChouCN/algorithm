@@ -108,7 +108,7 @@ void quickSort(vector<int>& arr, int low, int high) {
 	}
 }
 
-void printArray(const vector<int>& arr) {
+void printQuickSortArray(const vector<int>& arr) {
 	for (int i : arr) {
 		cout << i << " ";
 	}
@@ -119,12 +119,12 @@ int mainQuickSort() {
 	vector<int> arr = { 3, 9, 2, 4, 7, 6, 3, 5, 8 };
 
 	cout << "Original array: ";
-	printArray(arr);
+	printQuickSortArray(arr);
 
 	quickSort(arr, 0, arr.size() - 1);
 
 	cout << "Sorted array: ";
-	printArray(arr);
+	printQuickSortArray(arr);
 
 	return 0;
 }

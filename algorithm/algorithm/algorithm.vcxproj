@@ -50,6 +50,7 @@
     <ClCompile Include="arrays\ValidSudoku.cpp" />
     <ClCompile Include="divide-and-conquer\MergeSort.cpp" />
     <ClCompile Include="divide-and-conquer\QuickSort.cpp" />
+    <ClCompile Include="greedy\HeapSort.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
