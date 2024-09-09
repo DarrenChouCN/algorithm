@@ -48,6 +48,8 @@
     <ClCompile Include="arrays\SummaryRanges.cpp" />
     <ClCompile Include="arrays\Sum2.cpp" />
     <ClCompile Include="arrays\ValidSudoku.cpp" />
+    <ClCompile Include="divide-and-conquer\MergeSort.cpp" />
+    <ClCompile Include="divide-and-conquer\QuickSort.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

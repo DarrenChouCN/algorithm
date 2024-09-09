@@ -102,5 +102,11 @@
     <ClCompile Include="arrays\BasicSorts.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="divide-and-conquer\MergeSort.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="divide-and-conquer\QuickSort.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

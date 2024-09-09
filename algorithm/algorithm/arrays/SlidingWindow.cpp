@@ -82,7 +82,7 @@ vector<double> medianSlidingWindow(vector<int>& nums, int k) {
 	return result;
 }
 
-int main() {
+int mainMedianSlidingWindow() {
 	vector<int> nums = { 1, 3, -1, -3, 5, 3, 6, 7 };
 	int k = 3;
 
