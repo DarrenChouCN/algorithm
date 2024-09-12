@@ -48,9 +48,15 @@
     <ClCompile Include="arrays\SummaryRanges.cpp" />
     <ClCompile Include="arrays\Sum2.cpp" />
     <ClCompile Include="arrays\ValidSudoku.cpp" />
+    <ClCompile Include="distribution-based\RadixSort.cpp" />
     <ClCompile Include="divide-and-conquer\MergeSort.cpp" />
     <ClCompile Include="divide-and-conquer\QuickSort.cpp" />
     <ClCompile Include="greedy\HeapSort.cpp" />
+    <ClCompile Include="pointer-manipulation\MultiplePointers.cpp" />
+    <ClCompile Include="pointer-manipulation\TwoPointers.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pointer-manipulation\common.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

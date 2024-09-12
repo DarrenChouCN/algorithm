@@ -1,4 +1,4 @@
-# Master Theorem
+## Master Theorem
 The Master Theorem is a crucial for analyzing the time complexity of recursive algorithms, especially divide-and-conquer algorithms. It applies to recurrences of the following form:
 		
 		T(n) = aT(n/b) + O(n^d)
@@ -24,7 +24,7 @@ The Master Theorem determines the time complexity based on the relationship betw
     	T(n) = O(n^d)
 
 
-# Merge Sort
+## Merge Sort
 Merge Sort is a fundamental recursive algorithm with the following core ideas:
 
 1. The overall process is a simple recursion: sort the left side, sort the right side, and then merge them to make the whole array ordered, using an external sorting method.
@@ -70,7 +70,7 @@ void mergeSort(vector<int>& arr, int left, int right) {
 }
 ```
 
-# Small Sum
+## Small Sum
 In an array, for each element, find the sum of all the numbers to its left that are smaller than the current number.
 
 By utilizing the merge sort technique, the comparisons between individual elements can be transformed into range-based comparisons, reducing the overall number of comparisons and improving time complexity.
@@ -127,7 +127,7 @@ int mergeSortAndCountSmallSum(vector<int>& arr, int left, int right) {
 ```
 
 
-# Reverse Pairs
+## Reverse Pairs
 The reverse pairs Problem is an extension of the merge sort algorithm. The task is to count and output all the reverse pairs in an array. A reverse pair is defined as a pair of elements where the left element is greater than the right element.
 
 The reverse pairs problem is an extension of the merge sort algorithm. During the sorting process, when an element in the left half is found to be greater than an element in the right half, the number of reverse pairs is calculated by subtracting the indices. Specifically, the number of reverse pairs is the difference in indices between the current element in the left half and the right half. Each such reverse pair is then printed as it is discovered.
@@ -179,7 +179,7 @@ int mergeSortAndCountReversePairs(vector<int>& arr, int left, int right) {
 }
 ```
 
-# Partitioning an Array
+## Partitioning an Array
 The goal is to partition an array based on a given pivot value, such that all elements smaller than the pivot are placed on the left side of the array, and all elements greater than the pivot are placed on the right side.
 
 Use a two-pointer or one-pointer approach to rearrange the elements, placing smaller elements to the left and larger elements to the right. This process involves traversing the array once and swapping elements to achieve the partition.
@@ -202,7 +202,7 @@ void partitionArray(vector<int>& arr, int pivot) {
 }
 ```
 
-# Dutch National Flag
+## Dutch National Flag
 The Dutch National Flag problem involves partitioning an array into three parts based on a given pivot value:
 
 1. Elements less than the pivot go to the left.
@@ -239,7 +239,7 @@ void dutchNationalFlag(vector<int>& arr, int pivot) {
 }
 ```
 
-# Quick Sorting Optimization
+## Quick Sorting Optimization
 1. Three-way partitioning (Dutch National Flag problem): This optimization reduces redundant comparisons and recursion for elements that are equal to the pivot. For arrays with many equal elements, this optimization significantly improves efficiency.
 2. Random pivot selection: This strategy avoids the potential imbalance that could occur when using a fixed pivot, which might lead to worst-case performance O(N^2). By selecting the pivot randomly, more balanced partitions are likely to occur overall, maintaining a stable time complexity of O(nlogn).
 

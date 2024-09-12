@@ -192,7 +192,7 @@ void printArray(const vector<int>& arr) {
 	cout << endl;
 }
 
-int main() {
+int mainSortNearlySortedArray() {
 	vector<int> arr = { 6, 5, 3, 2, 8, 10, 9 };
 	int k = 3;
 
