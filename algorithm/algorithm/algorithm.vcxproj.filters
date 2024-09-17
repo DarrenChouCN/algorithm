@@ -120,9 +120,12 @@
     <ClCompile Include="pointer-manipulation\MultiplePointers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="basis\TreeTraversal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pointer-manipulation\common.h">
+    <ClInclude Include="common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
