@@ -122,6 +122,8 @@ void postorder2(TreeNode* root) {
 
 
 /*
+Max Width Of Binary Tree
+
 This method for calculating the maximum width fundamentally utilizes the properties of a binary tree, specifically the formulas for calculating the indices of child nodes, and uses these indices to compute the width of the current level. It keeps track of the maximum width using a variable. Each time it traverses the tree, all nodes of the current level are added to the queue, and the size is predetermined. Thus, the number of nodes dequeued matches the number of nodes in the current level.
 
 Time and Space Complexity: O(n) and O(n)
@@ -255,4 +257,79 @@ pair<bool, bool> isCompleteAndFullBT(TreeNode* root) {
 	bool isFullBT = (totalNodes == (1 << height) - 1);
 
 	return { isCompleteBT,isFullBT };
+}
+
+/*
+Lowest Common Ancestor
+Given a binary tree and two nodes p and q in the tree, find their lowest common ancestor (LCA).
+
+1. If the two nodes are not in the same subtree (e.g., one is on the leftmost subtree and the other is on the rightmost subtree), the recursive execution will eventually return two non-null values for left and right. At this point, the current root node is their lowest common ancestor (LCA).
+2. If both nodes belong to the same subtree (either extreme left or right), when the first node (p or q) is found during the recursive search, there is no need to continue searching further. Since both nodes are guaranteed to be present in this binary tree, the first encountered node will be their LCA.
+
+Time and Space Complexity: O(n) and O(h)
+*/
+TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+	// If the current node is null, or we find either p or q, return the current node
+	if (root == nullptr || root == p || root == q) {
+		return root;
+	}
+
+	// Recursively search in the left and right subtree
+	TreeNode* left = lowestCommonAncestor(root->left, p, q);
+	TreeNode* right = lowestCommonAncestor(root->right, p, q);
+
+	// If both left and right are non-null, the current node is the LCA
+	if (left && right) {
+		return root;
+	}
+
+	// If one side is non-null, return that side
+	return left ? left : right;
+}
+
+/*
+Inorder Successor in Binary Search Tree
+
+1. If the node has a right subtree: Find the leftmost node in the right subtree. This can be found by continuously following the left child pointers of the nodes in the right subtree.
+2. If the node does not have a right subtree: Use the parent pointer to traverse upwards until a node is found that is the left child of its parent. That parent node will be the successor of the target node.
+
+Time and Space Complexity: O(n) and O(h)
+*/
+TreeNode* findLeftMost(TreeNode* node) {
+	while (node->left)
+		node = node->left;
+	return node;
+}
+
+TreeNode* getSuccessor(TreeNode* node) {
+	if (node == nullptr) return nullptr;
+
+	if (node->right)
+		return findLeftMost(node->right);
+
+	TreeNode* current = node;
+	TreeNode* parent = node->parent;
+	while (parent && current == parent->right) {
+		current = parent;
+		parent = parent->parent;
+	}
+	return parent;
+}
+
+/*
+Paper Folding Sequence
+Given a paper that is folded n times in the same direction (downwards), unfold the paper and print the sequence of fold directions ("down" or "up") as they appear from left to right. The sequence should represent the folds seen on the paper after n folds.
+
+This is a problem of sequential traversal in a binary tree.
+
+Time and Space Complexity: O(n) and O(h)
+*/
+void printFolds(int level, int n, bool isDown) {
+	if (level > n) return;
+
+	printFolds(level + 1, n, true);
+
+	cout << (isDown ? "down " : "up ");
+
+	printFolds(level + 1, n, false);
 }

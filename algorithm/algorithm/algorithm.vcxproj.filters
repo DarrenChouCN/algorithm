@@ -120,7 +120,10 @@
     <ClCompile Include="pointer-manipulation\MultiplePointers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="basis\TreeTraversal.cpp">
+    <ClCompile Include="basis\Tree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="basis\Graph.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

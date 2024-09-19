@@ -48,7 +48,8 @@
     <ClCompile Include="arrays\SummaryRanges.cpp" />
     <ClCompile Include="arrays\Sum2.cpp" />
     <ClCompile Include="arrays\ValidSudoku.cpp" />
-    <ClCompile Include="basis\TreeTraversal.cpp" />
+    <ClCompile Include="basis\Graph.cpp" />
+    <ClCompile Include="basis\Tree.cpp" />
     <ClCompile Include="distribution-based\RadixSort.cpp" />
     <ClCompile Include="divide-and-conquer\MergeSort.cpp" />
     <ClCompile Include="divide-and-conquer\QuickSort.cpp" />
