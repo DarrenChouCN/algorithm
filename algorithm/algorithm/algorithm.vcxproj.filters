@@ -120,10 +120,19 @@
     <ClCompile Include="pointer-manipulation\MultiplePointers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="basis\Tree.cpp">
+    <ClCompile Include="basic-data-structure\Tree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="basis\Graph.cpp">
+    <ClCompile Include="basic-data-structure\Graph.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="basic-data-structure\Trie.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="greedy\ActivitySelection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="greedy\HuffmanTree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

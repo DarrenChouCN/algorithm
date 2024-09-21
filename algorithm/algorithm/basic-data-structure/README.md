@@ -91,9 +91,13 @@ This implementation uses a single traversal of the binary tree with an O(n) time
 
 1. BFS: A queue is used to perform a level-order traversal (BFS), visiting each node exactly once, maintaining an O(n) complexity.
 2. Multi-Tasking:
+
 	a. During traversal, the index of each node is calculated. By comparing the last node's index with totalNodes - 1, it is possible to determine if the tree is a complete binary tree.
+
 	b. The tree's height is calculated in the BFS by counting the levels. Using this height, the total nodes are compared with 2^h−1 to verify if the tree is a full binary tree.
+
 	c. The height is incremented each time a new level is processed.
+
 	d. The properties of a binary tree are used to track indices, assisting in verifying completeness.
 
 This approach combines multiple checks (completeness, fullness, and height) into a single traversal, reducing redundant computations.
@@ -263,10 +267,11 @@ vector<int> topologicalSort(Graph& graph) {
 
 1. Sort all edges of the graph in ascending order by weight. Use an unordered_map to track the parent (or root) of each node, initializing each node to be its own parent.
 2. Iterate through the sorted edges, and for each edge:
+
 	a. Use the findSet function to determine the root of each node connected by the edge.
-	b. If the roots are different, the nodes belong to separate components:
-		1) Add the edge to the Minimum Spanning Tree (MST).
-		2) Merge the components by updating the unordered_map.
+
+	b. If the roots are different, the nodes belong to separate components: Add the edge to the Minimum Spanning Tree (MST). Merge the components by updating the unordered_map.
+
 3. If the roots of the two nodes are the same, skip the edge to avoid forming a cycle. Continue until the MST contains exactly V−1 edges, where V is the number of nodes in the graph.
 
 Time and Space Complexity: O(ElogE) and O(E+V)
@@ -375,9 +380,13 @@ Dijkstra's algorithm is a well-known method for finding the shortest path from a
 1. Use a hash table to store the shortest known distance from the starting node to every other node. Initialize the distance to the starting node as 0 and all other nodes' distances as infinity (∞), representing that they are initially unreachable. Initialize a priority queue (min-heap) to select the node with the smallest tentative distance efficiently.
 2. From the distance map, choose the node with the smallest distance that has not yet been finalized. This node is considered to have the shortest known path from the starting point. Mark this node as "visited" to indicate that its shortest path has been determined and will not change in future iterations.
 3. For each neighboring node of the selected node:
+
 	a. Calculate the new potential distance as the sum of the shortest path to the selected node and the edge weight to the neighboring node.
+
 	b. If this new distance is smaller than the current recorded distance in the path table, update the distance map with this smaller value.
+
 	c. Push the neighboring nodes with their updated distances into the priority queue (min-heap).
+
 4. Continue selecting the node with the smallest distance from the priority queue, updating the distances of its neighbors, and marking nodes as visited. Repeat the process until all nodes have been visited or the priority queue is empty.
 5. Once the algorithm completes, the distance map will contain the shortest paths from the starting node to all other nodes.
 

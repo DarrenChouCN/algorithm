@@ -1,4 +1,16 @@
-﻿# Heap Operation
+﻿# Greedy Algorithm
+The greedy algorithm makes the optimal choice at each step without considering the future consequences, aiming to reach the global optimum through a series of local optimal decisions. Whether the greedy strategy can yield a global optimal solution depends on the nature of the problem itself.
+
+Problem-Solving Approach:
+
+1. Initial Analysis: Use brute force enumeration to collect data samples and observe their characteristics.
+2. Testing Greedy Strategies: Extract potential greedy strategies from the data samples and use a validator (also known as a “comparator” or “oracle”) to test the effectiveness of different strategies.
+3. No Need for Over-Proofing: During the strategy exploration phase, do not focus too much on proving correctness. First, experiment with different strategies and validate them through empirical testing.
+4. Legitimacy Verification: Once a greedy strategy is identified, it is necessary to prove its validity. When needed, check the "transitivity" of the strategy to ensure it leads to the global optimum.
+5. Establish Comparators: Define comparators based on the greedy strategy, which can be used for sorting or maintaining a priority queue to select the local optimal choice at each step.
+
+
+## Heap Operation
 Node Insertion
 1. Insert the element at the end of the array and compare it with its parent node (i−1)/2.
 2. In a max-heap, if the inserted node’s value is greater than its parent, swap the two elements.
@@ -61,7 +73,7 @@ void heapDelete(vector<int>& heap) {
 ```
 
 
-# Heap Sort
+## Heap Sort
 1. Build the heap (either max-heap or min-heap) from the given array.
 2. Repeately swap the last element with the root (the largest or smallest element) and adjust the heap to maintain the heap property.
 3. Reduce the size of the heap by 1 (size--), meaning the element at the end is in its final sorted position.
@@ -109,7 +121,7 @@ void heapSort(vector<int>& arr) {
 ```
 
 
-# Heap Sort Extension
+## Heap Sort Extension
 Given an almost sorted array, where each element's final sorted position will not be more than k positions away from its current position. The task is to sort this array efficiently.
 
 To solve this problem, a min-heap of size k can be used to maintain the order of elements. By continuously adding and removing elements from this heap, the array can be sorted in O(nlogk) time complexity. If k is small, the time complexity can even approach O(n). The goal is to manually implement a min-heap instead of relying on API-based priority queues, as manually maintaining the heap is both educational and practically beneficial in most interview and job situations.
@@ -180,5 +192,42 @@ void sortNearlySortedArray(vector<int>& arr, int k) {
 	while (!heap.empty()) {
 		arr[index++] = popHeap(heap);
 	}
+}
+```
+
+## Activity Selection Problem
+Given an array of projects where each project has a start and end time, schedule the projects in such a way that the maximum number of non-overlapping projects can be attended in a meeting room. The strategy involves sorting the projects based on their end times. For each project, if it starts after the previous one ends, it can be included; otherwise, it should be skipped.
+
+Strategies: Sorting by end time, start time, duration.
+
+Expected Results: Generally, sorting by end time will produce the maximum number of non-overlapping projects, confirming that it is the optimal greedy strategy for this problem.
+
+Time and Space Complexity: O(nlogn) and O(n)
+
+```cpp
+// Comparator for sorting by end time
+bool compareByEnd(const Project& a, const Project& b) {
+	// Comparator for sorting by duration
+	//return (a.end - a.start) < (b.end - b.start);
+
+	// Comparator for sorting by start time
+	//return a.start < b.start;
+
+	return a.end < b.end;
+}
+
+int maxEvents(vector<Project>& projects, bool (*compare)(const Project&, const Project&)) {
+	// Sort projects by end time using the comparator
+	sort(projects.begin(), projects.end(), compare);
+
+	int count = 0, lastEndTime = 0;
+	for (const auto& project : projects)
+	{
+		if (project.start >= lastEndTime) {
+			count++;
+			lastEndTime = project.end;
+		}
+	}
+	return count;
 }
 ```
