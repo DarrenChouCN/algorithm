@@ -231,3 +231,70 @@ int maxEvents(vector<Project>& projects, bool (*compare)(const Project&, const P
 	return count;
 }
 ```
+
+## Gold Bar Cutting Problem
+You have a gold bar of length n, and you want to divide it into smaller pieces. Each time you cut the gold bar, the cost is equal to the length of the gold bar you are cutting. The goal is to split the gold bar into multiple pieces in such a way that the total cost of all the cuts is minimized.
+
+Huffman-like Greedy Algorithm
+To minimize the total cost of cutting the gold bar, the strategy is to always combine the two smallest pieces of gold at each step. This ensures that the larger pieces are cut later, reducing the overall cost.
+
+Time and Space Complexity: O(nlogn) and O(n)
+
+```cpp
+int minCostToCutGoldBar(const vector<int>& lengths) {
+	priority_queue<int, vector<int>, greater<int>> minHeap(lengths.begin(), lengths.end());
+
+	int totalCost = 0;
+
+	while (minHeap.size() > 1) {
+		int first = minHeap.top();
+		minHeap.pop();
+		int second = minHeap.top();
+		minHeap.pop();
+
+		int cost = first + second;
+		totalCost += cost;
+
+		minHeap.push(cost);
+	}
+
+	return totalCost;
+}
+```
+
+## Profit Maximization
+You are given a set of projects, each with an associated cost and profit. The goal is to maximize your total amount of money by selecting up to k projects. You start with an initial capital m, and each time you select a project, you can only choose one that you can afford with your current capital. The aim is to complete at most k projects and achieve the maximum final capital.
+
+Greedy with Priority Queues
+A min-heap to manage projects by their cost and a max-heap to select the project with the highest profit among the projects.
+The maximum profit is inserted into the max-heap. Projects are initially added to a min-heap, prioritized by their cost in ascending order. A loop runs with the maximum limit being the number of projects that can be selected. In each iteration, the top element of the min-heap is checked to see if its cost is less than or equal to the current available capital. If the condition is met, the project is moved from the min-heap (smallest cost) to the max-heap (maximum profit). Then, the top element of the max-heap (maximum profit) is added to the current capital, and it is removed from the heap. This process repeats until no more valid projects can be selected.
+
+Time and Space Complexity: O(nlogn) and O(n)
+
+```cpp
+int maximizeCapital(int k, int initialCapital, vector<int>& costs, vector<int>& profits) {
+	priority_queue<pair<int, int>, vector<pair<int, int>>,
+		greater<pair<int, int>>> minCostHeap;
+
+	priority_queue<int> maxProfitHeap;
+
+	for (int i = 0; i < costs.size(); i++)
+		minCostHeap.push({ costs[i],profits[i] });
+
+	int currentCapital = initialCapital;
+
+	for (int i = 0; i < k; i++)
+	{
+		while (!minCostHeap.empty() && minCostHeap.top().first <= currentCapital) {
+			maxProfitHeap.push(minCostHeap.top().second);
+			minCostHeap.pop();
+		}
+
+		if (maxProfitHeap.empty()) break;
+
+		currentCapital += maxProfitHeap.top();
+		maxProfitHeap.pop();
+	}
+	return currentCapital;
+}
+```

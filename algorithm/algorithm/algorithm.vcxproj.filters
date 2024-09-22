@@ -129,10 +129,10 @@
     <ClCompile Include="basic-data-structure\Trie.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="greedy\ActivitySelection.cpp">
+    <ClCompile Include="greedy\ClassicalGreedyAlgorithms.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="greedy\HuffmanTree.cpp">
+    <ClCompile Include="backtracking\N-Queens.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
