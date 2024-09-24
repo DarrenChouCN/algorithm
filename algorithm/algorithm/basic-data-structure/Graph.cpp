@@ -271,3 +271,99 @@ void dijkstra(Graph& graph, Node* startNode) {
 		}
 	}
 }
+
+/*
+Another Approach of Dijkstra's Algorithm
+
+Manually implementing data structures like the heap in Dijkstra's algorithm provides the advantage of allowing modifications to the heap, which resolves the limitation of standard priority queues that do not support element updates directly. 
+However, the disadvantage is that this approach makes the code harder to read, maintain, and debug due to the complexity of managing multiple data structures. The maintenance of a custom heap, index mappings, and distance tables increases the risk of errors and reduces the overall readability of the code.
+*/
+void swap(vector<Node*>& heap, unordered_map<Node*, int>& heapIndexMap, int index1, int index2) {
+	heapIndexMap[heap[index1]] = index2;
+	heapIndexMap[heap[index2]] = index1;
+	Node* tmp = heap[index1];
+	heap[index1] = heap[index2];
+	heap[index2] = tmp;
+}
+
+void insertHeapify(vector<Node*>& heap, unordered_map<Node*, int>& heapIndexMap, unordered_map<Node*, int>& distanceMap, int index) {
+	while (index > 0 && distanceMap[heap[index]] < distanceMap[heap[(index - 1) / 2]]) {
+		swap(heap, heapIndexMap, index, (index - 1) / 2);
+		index = (index - 1) / 2;
+	}
+}
+
+void heapify(vector<Node*>& heap, unordered_map<Node*, int>& heapIndexMap,
+	unordered_map<Node*, int>& distanceMap, int heapSize, int index) {
+	int left = 2 * index + 1;
+	while (left < heapSize) {
+		int smallest = 
+			left + 1 < heapSize && distanceMap[heap[left + 1]] < distanceMap[heap[left]] ? 
+			left + 1 : left;
+		smallest = distanceMap[heap[smallest]] < distanceMap[heap[index]] ? smallest : index;
+
+		if (smallest == index) break;
+
+		swap(heap, heapIndexMap, index, smallest);
+
+		index = smallest;
+		left = 2 * index + 1;
+	}
+}
+
+void addOrUpdateOrIgnore(vector<Node*>& heap, unordered_map<Node*, int>& heapIndexMap,
+	unordered_map<Node*, int>& distanceMap, int& heapSize, Node* node, int distance) {
+	if (heapIndexMap.find(node) != heapIndexMap.end()) {
+		distanceMap[node] = min(distanceMap[node], distance);
+		insertHeapify(heap, heapIndexMap, distanceMap, heapIndexMap[node]);
+	}
+	else {
+		distanceMap[node] = distance;
+		heap.push_back(node);
+		heapIndexMap[node] = heapSize;
+		insertHeapify(heap, heapIndexMap, distanceMap, heapSize++);
+	}
+}
+
+Node* pop(vector<Node*>& heap, unordered_map<Node*, int>& heapIndexMap,
+	int& heapSize, unordered_map<Node*, int>& distanceMap) {
+	Node* result = heap[0];
+	swap(heap, heapIndexMap, 0, --heapSize);
+	heap.pop_back();
+	heapIndexMap.erase(result);
+	heapify(heap, heapIndexMap, distanceMap, heapSize, 0);
+	return result;
+}
+
+void dijkstra(Node* startNode, const vector<Node*>& graphNodes) {
+	vector<Node*> heap;
+	unordered_map<Node*, int> heapIndexMap;
+	unordered_map<Node*, int> distanceMap;
+	int heapSize = 0;
+
+	addOrUpdateOrIgnore(heap, heapIndexMap, distanceMap, heapSize, startNode, 0);
+	unordered_map<Node*, bool> visited;
+
+	while (heapSize > 0) {
+		Node* currentNode = pop(heap, heapIndexMap, heapSize, distanceMap);
+		int currentDistance = distanceMap[currentNode];
+
+		visited[currentNode] = true;
+
+		for (Edge* edge : currentNode->edges) {
+			Node* neighbor = graphNodes[edge->end];
+			if (visited.find(neighbor) == visited.end()) {
+				addOrUpdateOrIgnore(heap, heapIndexMap, distanceMap, heapSize, neighbor, currentDistance + edge->weight);
+			}
+		}
+	}
+
+	for (Node* node : graphNodes) {
+		if (distanceMap.find(node) != distanceMap.end()) {
+			cout << "Shortest distance to node " << node->value << ": " << distanceMap[node] << endl;
+		}
+		else {
+			cout << "Node " << node->value << " is unreachable from start node." << endl;
+		}
+	}
+}

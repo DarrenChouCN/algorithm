@@ -6,11 +6,7 @@ The N-Queens problem is a classic combinatorial problem where the task is to pla
 
 Thought Process:
 1. Traverse each column in the current row.
-2. Evaluate if the current row and column meet the conditions: 
-    1) The column is not occupied. 
-	2) The '\' diagonal is clear. 
-	3) The '/' diagonal is clear. 
-    4) If conditions are not met, move to the next column. If met, mark the current column and continue recursively with the next row, "selecting" this column for further exploration.
+2. Evaluate if the current row and column meet the conditions: ¢Ù The column is not occupied. ¢Ú The '\' diagonal is clear. ¢Û The '/' diagonal is clear. If conditions are not met, move to the next column. If met, mark the current column and continue recursively with the next row, "selecting" this column for further exploration.
 3. Repeat the process until reaching the last row, then add the current valid configuration to solutions.
 4. Once a solution is found, backtrack to the previous row to explore other column possibilities.
 5. Complete search: Each row and column will be fully searched for valid solutions and added to solutions until the entire search is finished.
@@ -18,17 +14,11 @@ Thought Process:
 Time and Space Complexity: O(N!) and O(N^2)
 
 ```cpp
-vector<vector<string>> solveNQueens(int n) {
-	vector<vector<string>> solutions;
-
-	vector<int> queens(n, -1); // the column positions of queens
-	vector<int> columns(n, false); // mark columns as occupied
-	vector<int> diagonals1(2 * n - 1, false); // mark '\' diagonals
-	vector<int> diagonals2(2 * n - 1, false); // mark '/' diagonals
-
-	backtrack(solutions, queens, n, 0, columns, diagonals1, diagonals2);
-
-	return solutions;
+vector<string> generateBoard(vector<int>& queens, int n) {
+	vector<string> board(n, string(n, '.'));
+	for (int i = 0; i < n; i++)
+		board[i][queens[i]] = 'Q';
+	return board;
 }
 
 void backtrack(vector<vector<string>>& solutions, vector<int>& queens, int n, int row,
@@ -63,15 +53,21 @@ void backtrack(vector<vector<string>>& solutions, vector<int>& queens, int n, in
 	}
 }
 
-vector<string> generateBoard(vector<int>& queens, int n) {
-	vector<string> board(n, string(n, '.'));
-	for (int i = 0; i < n; i++)
-		board[i][queens[i]] = 'Q';
-	return board;
+vector<vector<string>> solveNQueens(int n) {
+	vector<vector<string>> solutions;
+
+	vector<int> queens(n, -1); // the column positions of queens
+	vector<int> columns(n, false); // mark columns as occupied
+	vector<int> diagonals1(2 * n - 1, false); // mark '\' diagonals
+	vector<int> diagonals2(2 * n - 1, false); // mark '/' diagonals
+
+	backtrack(solutions, queens, n, 0, columns, diagonals1, diagonals2);
+
+	return solutions;
 }
 ```
 
-## N-Queens (Bit Manipulation)
+## N-Queens(Bit Manipulation)
 1. ((1 << n) - 1) & ~(columns | diagonals1 | diagonals2):
 	a. ((1 << n) - 1) generates a binary number with n bits all set to 1.
 	b. ~(columns | diagonals1 | diagonals2) takes the current positions where 1 has been placed (through OR operations) and inverts them. The positions where the inverted value has 1 represent the locations where a queen can be placed.
@@ -88,14 +84,8 @@ Although the complexity remains unchanged, the actual execution time and the req
 Time and Space Complexity: O(N!) and O(N^2)
 
 ```cpp
-vector<vector<string>> solveNQueens(int n) {
-	vector<vector<string>> solutions;
-	vector<int> queens(n, -1);
-	solve(0, 0, 0, 0, n, queens, solutions);
-	return solutions;
-}
-
-void solve(int row, int columns, int diagonals1, int diagonals2, int n, vector<int>& queens, vector<vector<string>>& solutions) {
+void solve(int row, int columns, int diagonals1, int diagonals2, int n,
+	vector<int>& queens, vector<vector<string>>& solutions) {
 	if (row == n) {
 		solutions.push_back(generateBoard(queens, n));
 		return;
@@ -107,16 +97,25 @@ void solve(int row, int columns, int diagonals1, int diagonals2, int n, vector<i
 		int position = availablePositions & -availablePositions;
 		availablePositions &= (availablePositions - 1);
 
-		int columnIndex = __builtin_ctz(position);
-		queens[row] = columnIndex;
+		unsigned long columnIndex;
+		if (_BitScanForward(&columnIndex, position)) {
+			queens[row] = columnIndex;  // Update the position of the queen
 
-		solve(row + 1,
-			columns | position,
-			(diagonals1 | position) << 1,
-			(diagonals2 | position) >> 1,
-			n, queens, solutions);
+			solve(row + 1,
+				columns | position,
+				(diagonals1 | position) << 1,
+				(diagonals2 | position) >> 1,
+				n, queens, solutions);
+		}
 
 		queens[row] = -1;
 	}
+}
+
+vector<vector<string>> solveNQueensWithBitManipulation(int n) {
+	vector<vector<string>> solutions;
+	vector<int> queens(n, -1);
+	solve(0, 0, 0, 0, n, queens, solutions);
+	return solutions;
 }
 ```

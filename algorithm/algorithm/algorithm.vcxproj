@@ -55,6 +55,7 @@
     <ClCompile Include="distribution-based\RadixSort.cpp" />
     <ClCompile Include="divide-and-conquer\MergeSort.cpp" />
     <ClCompile Include="divide-and-conquer\QuickSort.cpp" />
+    <ClCompile Include="dynamic-programming\StructuredRecursion.cpp" />
     <ClCompile Include="greedy\ClassicalGreedyAlgorithms.cpp" />
     <ClCompile Include="greedy\HeapSort.cpp" />
     <ClCompile Include="pointer-manipulation\MultiplePointers.cpp" />
