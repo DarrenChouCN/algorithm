@@ -2,6 +2,15 @@
 
 1. Recursion: The key to solving recursive problems is analyzing the branching structure. Each branch corresponds to a recursive call, with the parameters adjusted based on the problem¡¯s needs. After defining the branches and recursive function, constraints are added to prevent invalid or unnecessary recursion. Memoization can be used to further optimize the recursion process.
 2. Memoization: Memoization is applied by introducing a storage structure alongside the existing recursion. This storage is used to check if a result has already been computed. If so, the stored result is used, bypassing the recursive call. Memoization reduces time complexity by trading off a certain amount of space.
+3. Dynamic programming: Dynamic programming is an optimization over recursion with memoization. Recursion with memoization is a top-down approach where the problem is continuously broken down into smaller subproblems, and previously computed results are stored to avoid redundant calculations. Dynamic programming improves upon this by adopting a bottom-up approach. In recursion, each layer depends on the results from the previous layers; in dynamic programming, the solution is built iteratively, calculating results based on the recursive relation, starting from known base cases. The results are stored in a table, which allows direct access to previously computed values.
+
+General Thought Process for Dynamic Programming Design:
+
+When designing dynamic programming solutions, it is essential to start by calculating values that have already been determined (i.e., boundary values), and then proceed to compute the yet-to-be-determined values. While building the dynamic programming table, ensure that the traversal starts from the known elements and derives the unknown elements based on them.
+1. Logical Consistency: Calculating from known to unknown values ensures the problem progression is natural and correct, avoiding index reversals and reducing errors.
+2. Simplicity: Filling the DP table in a consistent manner keeps state dependencies clear, reducing complexity and simplifying implementation.
+
+Dynamic programming optimizes by avoiding the overhead of the recursive stack. However, dynamic programming is not always more efficient than recursion with memoization and is often constrained by the problem's scale. In other words, when a problem has too many variables or complex parameters, dynamic programming may not be feasible.
 
 
 ## Hanoi Problem
