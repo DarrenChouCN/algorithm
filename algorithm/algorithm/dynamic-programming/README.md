@@ -666,3 +666,117 @@ int lcsDP(const string& text1, const string& text2) {
 	return dp[m][n];
 }
 ```
+
+## Longest Palindromic Subsequence (LPS)
+Given a string str, return the length of the longest palindromic subsequence in the string. For example: If str = "a12b3c43def2ghi1kpm", the longest palindromic subsequence could be "1234321" or "123c321", and the length to return is 7.
+
+1. Recursive Branch 1, When the characters pointed to by the left and right pointers are equal, a palindrome is found, and the length is increased by 2. Both pointers move inward.
+2. Recursive Branches 2 and 3, The left/right pointer moves to the right/left to search for a palindrome.
+
+Time and Space Complexity: O(2^n) and O(n)
+
+```cpp
+int lpsRecursion(string& s, int left, int right, vector<vector<int>>& memo) {
+	if (left > right) return 0;
+
+	if (left == right) return 1;
+
+	if (memo[left][right] != -1)
+		return memo[left][right];
+
+	if (s[left] == s[right])
+		memo[left][right] = 2 + lpsRecursion(s, left + 1, right - 1, memo);
+
+	else
+		memo[left][right] = max(
+			lpsRecursion(s, left + 1, right, memo),
+			lpsRecursion(s, left, right - 1, memo)
+		);
+
+	return memo[left][right];
+}
+
+// Longest Palindromic Subsequence(LPS)  Time and Space Complexity: O(n^2) and O(n^2)
+int lpsDP(string s) {
+	int n = s.length();
+	vector<vector<int>> dp(n, vector<int>(n, 0));
+
+	//if (left == right) return 1;
+	for (int i = 0; i < n; i++)
+		dp[i][i] = 1;
+
+	for (int left = n - 2; left >= 0; left--)
+	{
+		for (int right = left + 1; right < n; right++) {
+			if (s[left] == s[right])
+				//memo[left][right] = 2 + lpsRecursion(s, left + 1, right - 1, memo);
+				dp[left][right] = 2 + dp[left + 1][right - 1];
+			else
+				/* memo[left][right] = max(
+						lpsRecursion(s, left + 1, right, memo),
+						lpsRecursion(s, left, right - 1, memo)
+					);*/
+				dp[left][right] = max(dp[left + 1][right], dp[left][right - 1]);
+		}
+	}
+	return dp[0][n - 1];
+}
+```
+
+## Knight's Moves on a Chessboard
+Imagine a chessboard where the bottom-left corner is at coordinate (0, 0). The chessboard has 9 horizontal lines and 10 vertical lines, forming a 9x10 grid.
+You are given three parameters: x, y, and k. A knight starts from the position (0, 0) and must make exactly k moves. Return the number of ways the knight can land on position (x, y) after exactly k moves.
+
+Time and Space Complexity: O(9 * 10 * k) and O(9 * 10 * k)
+
+```cpp
+int knightMoves[8][2] = {
+	{1,2},{1,-2},{-1,2},{-1,-2},
+	{2,1},{2,-1},{-2,1},{-2,-1}
+};
+
+int countKnightsMoveWays(int x, int y, int k, vector<vector<vector<int>>>& memo) {
+	if (k == 0)
+		return (x == 0 && y == 0) ? 1 : 0;
+
+	if (memo[x][y][k] != -1)
+		return memo[x][y][k];
+
+	int ways = 0;
+	for (int i = 0; i < 8; i++)
+	{
+		int newX = x + knightMoves[i][0];
+		int newY = y + knightMoves[i][1];
+
+		if (newX >= 0 && newX < 9 && newY >= 0 && newY < 10)
+			ways += countKnightsMoveWays(newX, newY, k - 1, memo);
+	}
+
+	memo[x][y][k] = ways;
+	return memo[x][y][k];
+}
+
+// Knight's Moves on a Chessboard  Time and Space Complexity: O(9*10*k) and O(9*10*k)
+int knightMovesDP[8][2] = {
+	{1,2},{1,-2},{-1,2},{-1,-2},
+	{2,1},{2,-1},{-2,1},{-2,-1}
+};
+
+int countKnightsMoveWaysDP(int x, int y, int k) {
+	vector<vector<vector<int>>> dp(9, vector<vector<int>>(10, vector<int>(k + 1, 0)));
+	dp[0][0][0] = 1;
+
+	for (int step = 1; step <= k; step++)
+		for (int i = 0; i < 9; i++)
+			for (int j = 0; j < 10; j++)
+				for (int m = 0; m < 8; m++) {
+					int newX = i + knightMovesDP[m][0];
+					int newY = j + knightMovesDP[m][1];
+					if (newX >= 0 && newX < 9 && newY >= 0 && newY < 10) {
+						dp[newX][newY][step] += dp[i][j][step - 1];
+					}
+				}
+
+	return dp[x][y][k];
+}
+```

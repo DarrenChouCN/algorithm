@@ -434,13 +434,76 @@ Time and Space Complexity: O(2^min(m,n)) and O(m+n)
 int lcsRecursion(const string& text1, const string& text2, int i, int j) {
 	if (i < 0 || j < 0) return 0;
 
-	if (text1[i] == text2[j]) 
+	if (text1[i] == text2[j])
 		return 1 + lcsRecursion(text1, text2, i - 1, j - 1);
 
-	else 
+	else
 		return max(lcsRecursion(text1, text2, i - 1, j), lcsRecursion(text1, text2, i, j - 1));
 }
 
 int lcs(const string& text1, const string& text2) {
 	return lcsRecursion(text1, text2, text1.length() - 1, text2.length() - 1);
+}
+
+/*
+Longest Palindromic Subsequence (LPS)
+Given a string str, return the length of the longest palindromic subsequence in the string. For example: If str = "a12b3c43def2ghi1kpm", the longest palindromic subsequence could be "1234321" or "123c321", and the length to return is 7.
+
+Recursive Branch 1: When the characters pointed to by the left and right pointers are equal, a palindrome is found, and the length is increased by 2. Both pointers move inward.
+Recursive Branches 2 and 3: The left/right pointer moves to the right/left to search for a palindrome.
+
+Time and Space Complexity: O(2^n) and O(n)
+*/
+int lpsRecursion(string& s, int left, int right, vector<vector<int>>& memo) {
+	if (left > right) return 0;
+
+	if (left == right) return 1;
+
+	if (memo[left][right] != -1)
+		return memo[left][right];
+
+	if (s[left] == s[right])
+		memo[left][right] = 2 + lpsRecursion(s, left + 1, right - 1, memo);
+
+	else
+		memo[left][right] = max(
+			lpsRecursion(s, left + 1, right, memo),
+			lpsRecursion(s, left, right - 1, memo)
+		);
+
+	return memo[left][right];
+}
+
+
+/*
+Knight's Moves on a Chessboard
+Imagine a chessboard where the bottom-left corner is at coordinate (0, 0). The chessboard has 9 horizontal lines and 10 vertical lines, forming a 9x10 grid.
+You are given three parameters: x, y, and k. A knight starts from the position (0, 0) and must make exactly k moves. Return the number of ways the knight can land on position (x, y) after exactly k moves.
+
+Time and Space Complexity: O(9*10*k) and O(9*10*k)
+*/
+int knightMoves[8][2] = {
+	{1,2},{1,-2},{-1,2},{-1,-2},
+	{2,1},{2,-1},{-2,1},{-2,-1}
+};
+
+int countKnightsMoveWays(int x, int y, int k, vector<vector<vector<int>>>& memo) {
+	if (k == 0)
+		return (x == 0 && y == 0) ? 1 : 0;
+
+	if (memo[x][y][k] != -1)
+		return memo[x][y][k];
+
+	int ways = 0;
+	for (int i = 0; i < 8; i++)
+	{
+		int newX = x + knightMoves[i][0];
+		int newY = y + knightMoves[i][1];
+
+		if (newX >= 0 && newX < 9 && newY >= 0 && newY < 10)
+			ways += countKnightsMoveWays(newX, newY, k - 1, memo);
+	}
+
+	memo[x][y][k] = ways;
+	return memo[x][y][k];
 }
