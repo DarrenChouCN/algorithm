@@ -507,3 +507,223 @@ int countKnightsMoveWays(int x, int y, int k, vector<vector<vector<int>>>& memo)
 	memo[x][y][k] = ways;
 	return memo[x][y][k];
 }
+
+
+/*
+Minimum Path Sum
+Given a two-dimensional array matrix, a person must start from the top-left corner and reach the bottom-right corner. Along the way, they can only move down or right, and the numbers encountered along the path are summed. Return the minimum path sum.
+
+Time and Space Complexity: O(row * cols) and O(row * cols)
+*/
+int minPathSumMemo(vector<vector<int>>& matrix, int i, int j, vector<vector<int>>& memo) {
+	int row = matrix.size();
+	int cols = matrix[0].size();
+
+	if (i == row - 1 && j == cols - 1)
+		return matrix[i][j];
+
+	if (memo[i][j] != -1)
+		return memo[i][j];
+
+	if (i == row - 1) {
+		memo[i][j] = matrix[i][j] + minPathSumMemo(matrix, i, j + 1, memo);
+		return memo[i][j];
+	}
+
+	if (j == cols - 1) {
+		memo[i][j] = matrix[i][j] + minPathSumMemo(matrix, i + 1, j, memo);
+		return memo[i][j];
+	}
+
+	int right = minPathSumMemo(matrix, i, j + 1, memo);
+	int down = minPathSumMemo(matrix, i + 1, j, memo);
+
+	memo[i][j] = matrix[i][j] + min(right, down);
+	return memo[i][j];
+}
+
+
+/*
+Bob's Survival Probability After k Moves
+Given 5 parameters: N, M, row, col, and k, representing a grid of size N * M, Bob starts at position (row, col). Bob needs to take exactly k steps, and at each step, Bob moves randomly in one of four directions (up, down, left, or right) with equal probability. If at any time Bob moves out of the grid, he dies.
+Return the probability that Bob is still within the N * M grid after taking exactly k steps.
+
+Time and Space Complexity: O(N * M * k * 4) and O(N * M * k)
+*/
+int moves[4][2] = { {-1,0},{1,0},{0,-1},{0,1} };
+
+double findProbability(int N, int M, int row, int col, int k,
+	vector<vector<vector<double>>>& memo) {
+	if (row < 0 || row >= N || col < 0 || col >= M)
+		return 0.0;
+
+	if (k == 0)
+		return 1.0;
+
+	if (memo[row][col][k] != -1.0)
+		return memo[row][col][k];
+
+	double prob = 0.0;
+	for (int i = 0; i < 4; i++)
+	{
+		int newRow = row + moves[i][0];
+		int newCol = col + moves[i][1];
+		prob += findProbability(N, M, newRow, newCol, k - 1, memo);
+	}
+
+	prob /= 4.0;
+	memo[row][col][k] = prob;
+
+	return prob;
+}
+
+/*
+Kill Probability
+There is a monster with N health points, waiting for a hero to attack it. The hero attacks the monster exactly K times, and with each attack, the hero deals damage that is randomly selected from the range [0, M] with equal probability.
+The question asks for the probability that the hero will completely kill the monster (i.e., reduce its health to 0 or less) after K attacks.
+
+Time and Space Complexity: O(N * M * K) and O(N * K)
+*/
+double killProbabilityRecursive(int N, int M, int K, vector<vector<double>>& memo) {
+	if (N <= 0) return 1.0;
+
+	if (K == 0) return 0.0;
+
+	if (memo[N][K] != -1.0) return memo[N][K];
+
+	double prob = 0.0;
+	for (int d = 0; d <= M; ++d) {
+		prob += killProbabilityRecursive(N - d, M, K - 1, memo);
+	}
+
+	prob /= (M + 1);
+
+	memo[N][K] = prob;
+
+	return prob;
+}
+
+
+/*
+Min Coins
+You are given an array arr of distinct positive integers, representing coin denominations. Each value in arr is considered as a type of coin, and you have an unlimited supply of each type of coin. Additionally, you are given a target positive integer aim.
+Your task is to determine the minimum number of coins needed to form the amount aim using the given coin denominations. If it's not possible to form the target amount using the given coins, return -1.
+
+Time and Space Complexity: O(n * aim) and O(aim)
+*/
+int minCoins(int aim, const vector<int>& arr, unordered_map<int, int>& memo) {
+	if (memo.find(aim) != memo.end()) return memo[aim];
+
+	if (aim == 0) return 0;
+
+	if (aim < 0)  return INT_MAX;
+
+	int minCoinsNeeded = INT_MAX;
+
+	for (int coin : arr) {
+		int res = minCoins(aim - coin, arr, memo);
+		if (res != INT_MAX)
+			minCoinsNeeded = min(minCoinsNeeded, res + 1);
+	}
+
+	memo[aim] = minCoinsNeeded;
+	return minCoinsNeeded;
+}
+
+/*
+Integer Partition with Decreasing Parts
+Given a positive integer n, find the number of ways to partition n into distinct parts such that each part is strictly greater than the part that follows it. In other words, each partition must be in strictly decreasing order.
+For example, for n=5, the partitions in decreasing order are 5,4+1,3+2, so the answer would be 3.
+
+Time and Space Complexity: O(n^2) and O(n^2)
+*/
+int countPartitions(int n, int maxPart, vector<vector<int>>& memo) {
+
+	if (n == 0) return 1;
+
+	if (n < 0) return 0;
+
+	if (memo[n][maxPart] != -1)
+		return memo[n][maxPart];
+
+	int result = 0;
+
+	for (int k = 1; k <= maxPart; k++)
+		result += countPartitions(n - k, k - 1, memo);
+
+	memo[n][maxPart] = result;
+
+	return result;
+}
+
+/*
+Partition Two Subsets with Minimal Difference
+Given an array of positive integers arr, partition the numbers in the array into two subsets such that the difference between the sums of the two subsets is minimized. Return the sum of the subset with the smaller total sum in the closest possible partition.
+
+Time and Space Complexity: O(i * rest / 2) and O(i * rest / 2)
+*/
+int closestSumRecursion(const vector<int>& arr, int i, int rest, vector<vector<int>>& memo) {
+	if (i == arr.size()) return 0;
+
+	if (memo[i][rest] != -1) return memo[i][rest];
+
+	int excludeCurrent = closestSumRecursion(arr, i + 1, rest, memo);
+
+	int includeCurrent = 0;
+	if (arr[i] <= rest)
+		includeCurrent = arr[i] + closestSumRecursion(arr, i, rest - arr[i], memo);
+
+	memo[i][rest] = max(excludeCurrent, includeCurrent);
+	return memo[i][rest];
+}
+
+int closestSum(const vector<int>& arr, int total) {
+	int n = arr.size();
+	int half = total / 2;
+
+	vector<vector<int>> memo(n, vector<int>(half + 1, -1));
+
+	return closestSumRecursion(arr, 0, half, memo);
+}
+
+
+/*
+Partition Two Balanced Subsets with Minimal Difference
+Given an array arr of positive integers, partition the numbers in arr into two subsets under the following conditions:
+If the length of arr is even, both subsets must contain the same number of elements.
+If the length of arr is odd, the two subsets must differ in size by exactly one element.
+The goal is to minimize the difference between the sums of the two subsets. Return the sum of the subset with the smaller total sum in the closest possible partition.
+
+Time and Space Complexity: O(n^2 * sum) and O(n)
+*/
+int partitionBSRecursion(const vector<int>& arr, int i, int picks, int rest) {
+	if (i == arr.size()) 
+		return picks == 0 ? 0 : -1;
+	
+	int excludeCurrent = partitionBSRecursion(arr, i + 1, picks, rest);
+
+	int includeCurrent = -1;
+	int next = -1;
+	if (arr[i] <= rest) {
+		next = partitionBSRecursion(arr, i + 1, picks - 1, rest - arr[i]);
+	}
+	if (next != -1) {
+		includeCurrent = arr[i] + next;
+	}
+
+	return max(includeCurrent, excludeCurrent);
+}
+
+int partitionBS(const vector<int>& arr) {
+	if (arr.empty() || arr.size() < 2) return 0;
+
+	int n = arr.size();
+	int half = 0;
+	for (int num : arr) half += num;
+	half /= 2;
+
+	int evenResult = partitionBSRecursion(arr, 0, n / 2, half);
+	int oddResult = partitionBSRecursion(arr, 0, n / 2 + 1, half);
+
+	return n % 2 == 0 ? evenResult : max(evenResult, oddResult);
+}

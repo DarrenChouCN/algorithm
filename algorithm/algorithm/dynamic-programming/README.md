@@ -1,10 +1,19 @@
 # Dynamic Programming
 
 1. Recursion: The key to solving recursive problems is analyzing the branching structure. Each branch corresponds to a recursive call, with the parameters adjusted based on the problem¡¯s needs. After defining the branches and recursive function, constraints are added to prevent invalid or unnecessary recursion. Memoization can be used to further optimize the recursion process.
+
 2. Memoization: Memoization is applied by introducing a storage structure alongside the existing recursion. This storage is used to check if a result has already been computed. If so, the stored result is used, bypassing the recursive call. Memoization reduces time complexity by trading off a certain amount of space.
+
 3. Dynamic programming: Dynamic programming is an optimization over recursion with memoization. Recursion with memoization is a top-down approach where the problem is continuously broken down into smaller subproblems, and previously computed results are stored to avoid redundant calculations. Dynamic programming improves upon this by adopting a bottom-up approach. In recursion, each layer depends on the results from the previous layers; in dynamic programming, the solution is built iteratively, calculating results based on the recursive relation, starting from known base cases. The results are stored in a table, which allows direct access to previously computed values.
 
-General Thought Process for Dynamic Programming Design:
+## Brute Force Recursive Process Design
+
+1. Keep parameters simple: The parameters in the recursive process should not be more complex than basic int types to avoid unnecessary complexity and reduce the risk of inefficient recursion.
+
+2. Guarantee uniqueness: If the parameters are more complex than a single-dimensional int structure (such as arrays or lists), ensure the uniqueness of these parameters. In such cases, memoization should be applied to avoid redundant calculations.
+3. Minimize parameters: Try to minimize the number of varying parameters in the recursive function. Fewer parameters make the recursion simpler, easier to understand, and more efficient to execute.
+
+## Dynamic Programming Design
 
 When designing dynamic programming solutions, it is essential to start by calculating values that have already been determined (i.e., boundary values), and then proceed to compute the yet-to-be-determined values. While building the dynamic programming table, ensure that the traversal starts from the known elements and derives the unknown elements based on them.
 1. Logical Consistency: Calculating from known to unknown values ensures the problem progression is natural and correct, avoiding index reversals and reducing errors.
@@ -778,5 +787,414 @@ int countKnightsMoveWaysDP(int x, int y, int k) {
 				}
 
 	return dp[x][y][k];
+}
+```
+
+## Minimum Path Sum
+Given a two-dimensional array matrix, a person must start from the top-left corner and reach the bottom-right corner. Along the way, they can only move down or right, and the numbers encountered along the path are summed. Return the minimum path sum.
+
+Time and Space Complexity: O(row * cols) and O(row * cols)
+
+```cpp
+int minPathSumMemo(vector<vector<int>>& matrix, int i, int j, vector<vector<int>>& memo) {
+	int row = matrix.size();
+	int cols = matrix[0].size();
+
+	if (i == row - 1 && j == cols - 1)
+		return matrix[i][j];
+
+	if (memo[i][j] != -1)
+		return memo[i][j];
+
+	if (i == row - 1) {
+		memo[i][j] = matrix[i][j] + minPathSumMemo(matrix, i, j + 1, memo);
+		return memo[i][j];
+	}
+
+	if (j == cols - 1) {
+		memo[i][j] = matrix[i][j] + minPathSumMemo(matrix, i + 1, j, memo);
+		return memo[i][j];
+	}
+
+	int right = minPathSumMemo(matrix, i, j + 1, memo);
+	int down = minPathSumMemo(matrix, i + 1, j, memo);
+
+	memo[i][j] = matrix[i][j] + min(right, down);
+	return memo[i][j];
+}
+
+/*
+Minimum Path Sum
+In the original dynamic programming solution, a 2D table is used to store the minimum path sum for each cell. Since each cell only depends on the value to its left and the value above, the space complexity can be reduced from O(m * n) to O(n) by using a 1D array.
+For each cell in subsequent rows, update dp[j] as the minimum of dp[j-1] (left) and dp[j] (above), plus the current cell value.
+
+Time and Space Complexity: O(m * n) and O(n)
+*/
+int minPathSumDP(vector<vector<int>>& matrix) {
+	int rows = matrix.size();
+	int cols = matrix[0].size();
+
+	vector<int> dp(cols, 0);
+	dp[0] = matrix[0][0];
+
+	for (int j = 1; j < cols; j++)
+		dp[j] = dp[j - 1] + matrix[0][j];
+
+	for (int i = 1; i < rows; i++)
+	{
+		dp[0] += matrix[i][0];
+		for (int j = 1; j < cols; j++)
+			dp[j] = matrix[i][j] + min(dp[j], dp[j - 1]);
+	}
+	return dp[cols - 1];
+}
+```
+
+
+## Bob's Survival Probability After k Moves
+Given 5 parameters: N, M, row, col, and k, representing a grid of size N * M, Bob starts at position (row, col). Bob needs to take exactly k steps, and at each step, Bob moves randomly in one of four directions (up, down, left, or right) with equal probability. If at any time Bob moves out of the grid, he dies.
+Return the probability that Bob is still within the N * M grid after taking exactly k steps.
+
+Time and Space Complexity: O(N * M * k * 4) and O(N * M * k)
+
+```cpp
+int moves[4][2] = { {-1,0},{1,0},{0,-1},{0,1} };
+
+double findProbability(int N, int M, int row, int col, int k,
+	vector<vector<vector<double>>>& memo) {
+	if (row < 0 || row >= N || col < 0 || col >= M)
+		return 0.0;
+
+	if (k == 0)
+		return 1.0;
+
+	if (memo[row][col][k] != -1.0)
+		return memo[row][col][k];
+
+	double prob = 0.0;
+	for (int i = 0; i < 4; i++)
+	{
+		int newRow = row + moves[i][0];
+		int newCol = col + moves[i][1];
+		prob += findProbability(N, M, newRow, newCol, k - 1, memo);
+	}
+
+	prob /= 4.0;
+	memo[row][col][k] = prob;
+
+	return prob;
+}
+
+// Bob's Survival Probability After k Moves 
+// Time and Space Complexity: O(N * M * k * 4) and O(N * M * k)
+int movesDP[4][2] = { {-1,0},{1,0},{0,-1},{0,1} };
+
+double findProbabilityDP(int N, int M, int row, int col, int k) {
+
+	vector<vector<vector<double>>> dp(N, vector<vector<double>>(M, vector<double>(k + 1, 0.0)));
+
+	dp[row][col][k] = 1.0;
+
+	for (int step = k; step > 0; step--)
+		for (int i = 0; i < N; i++)
+			for (int j = 0; j < M; j++)
+				if (dp[i][j][step] > 0.0) {
+					for (int m = 0; m < 4; m++) {
+						int newRow = i + movesDP[m][0];
+						int newCol = j + movesDP[m][1];
+
+						if (newRow >= 0 && newRow < N && newCol >= 0 && newCol < M) {
+							dp[newRow][newCol][step - 1] += dp[i][j][step] / 4.0;
+						}
+					}
+				}
+
+	// After processing all steps, sum the probabilities at step 0
+	double result = 0.0;
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; ++j) {
+			result += dp[i][j][0];
+		}
+	}
+	return result;
+}
+```
+
+## Kill Probability
+There is a monster with N health points, waiting for a hero to attack it. The hero attacks the monster exactly K times, and with each attack, the hero deals damage that is randomly selected from the range [0, M] with equal probability.
+
+The question asks for the probability that the hero will completely kill the monster (i.e., reduce its health to 0 or less) after K attacks.
+
+Time and Space Complexity: O(N * M * K) and O(N * K)
+
+```cpp
+double killProbabilityRecursive(int N, int M, int K, vector<vector<double>>& memo) {
+	if (N <= 0) return 1.0;
+
+	if (K == 0) return 0.0;
+
+	if (memo[N][K] != -1.0) return memo[N][K];
+
+	double prob = 0.0;
+	for (int d = 0; d <= M; ++d) {
+		prob += killProbabilityRecursive(N - d, M, K - 1, memo);
+	}
+
+	prob /= (M + 1);
+
+	memo[N][K] = prob;
+
+	return prob;
+}
+
+// Kill Probability Time and Space Complexity: O(N * M * K) and O(N * K)
+double killProbability(int N, int M, int K) {
+	vector<vector<double>> dp(N + 1, vector<double>(K + 1, 0.0));
+
+	for (int j = 0; j <= K; ++j)
+		dp[0][j] = 1.0;
+
+	for (int attack = 1; attack <= K; ++attack)
+		for (int health = 0; health <= N; ++health)
+			for (int damage = 0; damage <= M; ++damage) {
+				int newHealth = health - damage;
+
+				if (newHealth <= 0)
+					dp[health][attack] += 1.0 / (M + 1);
+
+				else
+					dp[health][attack] += dp[newHealth][attack - 1] / (M + 1);
+			}
+
+	return dp[N][K];
+}
+```
+
+## Min Coins
+You are given an array arr of distinct positive integers, representing coin denominations. Each value in arr is considered as a type of coin, and you have an unlimited supply of each type of coin. Additionally, you are given a target positive integer aim.
+
+Your task is to determine the minimum number of coins needed to form the amount aim using the given coin denominations. If it's not possible to form the target amount using the given coins, return -1.
+
+Time and Space Complexity: O(n * aim) and O(aim)
+
+```cpp
+int minCoins(int aim, const vector<int>& arr, unordered_map<int, int>& memo) {
+	if (memo.find(aim) != memo.end()) return memo[aim];
+
+	if (aim == 0) return 0;
+
+	if (aim < 0)  return INT_MAX;
+
+	int minCoinsNeeded = INT_MAX;
+
+	for (int coin : arr) {
+		int res = minCoins(aim - coin, arr, memo);
+		if (res != INT_MAX)
+			minCoinsNeeded = min(minCoinsNeeded, res + 1);
+	}
+
+	memo[aim] = minCoinsNeeded;
+	return minCoinsNeeded;
+}
+
+// Min Coins  Time and Space Complexity: O(n * aim) and O(aim)
+int minCoinsDP(int aim, const vector<int>& arr) {
+	vector<int> dp(aim + 1, INT_MAX);
+	dp[0] = 0;
+
+	for (int i = 1; i <= aim; i++)
+		for (int coin : arr)
+			/*int res = minCoins(aim - coin, arr, memo);
+			if (res != INT_MAX)
+				minCoinsNeeded = min(minCoinsNeeded, res + 1);*/
+			if (i >= coin && dp[i - coin] != INT_MAX) {
+				dp[i] = min(dp[i], dp[i - coin] + 1);
+			}
+	return dp[aim] == INT_MAX ? -1 : dp[aim];
+}
+```
+
+## Integer Partition with Decreasing Parts
+Given a positive integer n, find the number of ways to partition n into distinct parts such that each part is strictly greater than the part that follows it. In other words, each partition must be in strictly decreasing order.
+
+For example, for n=5, the partitions in decreasing order are 5,4+1,3+2, so the answer would be 3.
+
+Time and Space Complexity: O(n^2) and O(n^2)
+
+```cpp
+int countPartitions(int n, int maxPart, vector<vector<int>>& memo) {
+
+	if (n == 0) return 1;
+
+	if (n < 0) return 0;
+
+	if (memo[n][maxPart] != -1)
+		return memo[n][maxPart];
+
+	int result = 0;
+
+	for (int k = 1; k <= maxPart; k++)
+		result += countPartitions(n - k, k - 1, memo);
+
+	memo[n][maxPart] = result;
+
+	return result;
+}
+
+// Integer Partition with Decreasing Parts
+int countPartitionsDP(int n) {
+	vector<vector<int>> dp(n + 1, vector<int>(n + 1, 0));
+
+	for (int j = 0; j <= n; j++)
+		dp[0][j] = 1;
+
+	for (int i = 1; i <= n; i++)
+		for (int j = 1; j <= n; j++) {
+			dp[i][j] = dp[i][j - 1];
+
+			//result += countPartitions(n - k, k - 1, memo);
+			if (i >= j) {
+				dp[i][j] += dp[i - j][j - 1];
+			}
+		}
+
+	return dp[n][n];
+}
+```
+
+## Partition Two Subsets with Minimal Difference
+Given an array of positive integers arr, partition the numbers in the array into two subsets such that the difference between the sums of the two subsets is minimized. Return the sum of the subset with the smaller total sum in the closest possible partition.
+
+
+Time and Space Complexity: O(i * rest / 2) and O(i * rest / 2)
+
+```cpp
+int closestSumRecursion(const vector<int>& arr, int i, int rest, vector<vector<int>>& memo) {
+	if (i == arr.size()) return 0;
+
+	if (memo[i][rest] != -1) return memo[i][rest];
+
+	int excludeCurrent = closestSumRecursion(arr, i + 1, rest, memo);
+
+	int includeCurrent = 0;
+	if (arr[i] <= rest)
+		includeCurrent = arr[i] + closestSumRecursion(arr, i, rest - arr[i], memo);
+
+	memo[i][rest] = max(excludeCurrent, includeCurrent);
+	return memo[i][rest];
+}
+
+int closestSum(const vector<int>& arr, int total) {
+	int n = arr.size();
+	int half = total / 2;
+
+	vector<vector<int>> memo(n, vector<int>(half + 1, -1));
+
+	return closestSumRecursion(arr, 0, half, memo);
+}
+
+// Partition an Array into Two Subsets with Minimal Difference
+// Time and Space Complexity: O(i * rest / 2) and O(i * rest / 2)
+int closestSumDP(const vector<int> arr, int total) {
+	int n = arr.size();
+	int half = total / 2;
+
+	vector<vector<int>> dp(n + 1, vector<int>(half + 1, 0));
+
+	for (int i = n - 1; i >= 0; i--) {
+		for (int rest = 0; rest <= half; rest++) {
+			int excludeCurrent = dp[i + 1][rest];
+			int includeCurrent = 0;
+			if (arr[i] <= rest)
+				includeCurrent = arr[i] + dp[i][rest - arr[i]];
+			dp[i][rest] = max(excludeCurrent, includeCurrent);
+		}
+	}
+	return dp[0][half];
+}
+```
+
+## Partition Two Balanced Subsets with Minimal Difference
+Given an array arr of positive integers, partition the numbers in arr into two subsets under the following conditions:
+1. If the length of arr is even, both subsets must contain the same number of elements.
+2. If the length of arr is odd, the two subsets must differ in size by exactly one element.
+
+The goal is to minimize the difference between the sums of the two subsets. Return the sum of the subset with the smaller total sum in the closest possible partition.
+
+Time and Space Complexity: O(n^2 * sum) and O(n)
+
+```cpp
+int partitionBSRecursion(const vector<int>& arr, int i, int picks, int rest) {
+	if (i == arr.size()) 
+		return picks == 0 ? 0 : -1;
+	
+	int excludeCurrent = partitionBSRecursion(arr, i + 1, picks, rest);
+
+	int includeCurrent = -1;
+	int next = -1;
+	if (arr[i] <= rest) {
+		next = partitionBSRecursion(arr, i + 1, picks - 1, rest - arr[i]);
+	}
+	if (next != -1) {
+		includeCurrent = arr[i] + next;
+	}
+
+	return max(includeCurrent, excludeCurrent);
+}
+
+int partitionBS(const vector<int>& arr) {
+	if (arr.empty() || arr.size() < 2) return 0;
+
+	int n = arr.size();
+	int half = 0;
+	for (int num : arr) half += num;
+	half /= 2;
+
+	int evenResult = partitionBSRecursion(arr, 0, n / 2, half);
+	int oddResult = partitionBSRecursion(arr, 0, n / 2 + 1, half);
+
+	return n % 2 == 0 ? evenResult : max(evenResult, oddResult);
+}
+
+// Partition Two Balanced Subsets with Minimal Difference
+// Time and Space Complexity: O(n^2 * sum) and O(n^2 * sum)
+int partitionBSDP(const vector<int>& arr) {
+	if (arr.empty() || arr.size() < 2) return 0;
+
+	
+	int half = 0;
+	for (int num : arr) half += num;
+	half /= 2;
+	int n = arr.size();
+	int m = (n + 1) / 2;
+
+	vector<vector<vector<int>>> dp(n + 1,
+		vector<vector<int>>(m + 1, vector<int>(half + 1, -1)));
+
+	/*if (i == arr.size())
+		return picks == 0 ? 0 : -1;*/
+	for (int rest = 0; rest <= half; rest++)
+		dp[n][0][rest] = 0;
+
+	for (int i = n - 1; i >= 0; i--)
+		for (int picks = 0; picks <= m; picks++)
+			for (int rest = 0; rest <= half; rest++) {
+				int includeCurrent = dp[i + 1][picks][rest];
+
+				int excludeCurrent = -1;
+				int next = -1;
+				if (picks >= 1 && arr[i] <= rest) {
+					next = dp[i + 1][picks - 1][rest - arr[i]];
+				}
+				if (next != -1) {
+					includeCurrent = arr[i] + next;
+				}
+				dp[i][picks][rest] = max(includeCurrent, excludeCurrent);
+			}
+
+	int evenResult = dp[0][n / 2][half];
+	int oddResult = dp[0][n / 2 + 1][half];
+
+	return n % 2 == 0 ? evenResult : max(evenResult, oddResult);
 }
 ```

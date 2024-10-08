@@ -251,7 +251,6 @@ int knightMovesDP[8][2] = {
 };
 
 int countKnightsMoveWaysDP(int x, int y, int k) {
-
 	vector<vector<vector<int>>> dp(9, vector<vector<int>>(10, vector<int>(k + 1, 0)));
 	dp[0][0][0] = 1;
 
@@ -267,4 +266,185 @@ int countKnightsMoveWaysDP(int x, int y, int k) {
 				}
 
 	return dp[x][y][k];
+}
+
+/*
+Minimum Path Sum
+In the original dynamic programming solution, a 2D table is used to store the minimum path sum for each cell. Since each cell only depends on the value to its left and the value above, the space complexity can be reduced from O(m * n) to O(n) by using a 1D array.
+For each cell in subsequent rows, update dp[j] as the minimum of dp[j-1] (left) and dp[j] (above), plus the current cell value.
+
+Time and Space Complexity: O(m * n) and O(n)
+*/
+int minPathSumDP(vector<vector<int>>& matrix) {
+	int rows = matrix.size();
+	int cols = matrix[0].size();
+
+	vector<int> dp(cols, 0);
+	dp[0] = matrix[0][0];
+
+	for (int j = 1; j < cols; j++)
+		dp[j] = dp[j - 1] + matrix[0][j];
+
+	for (int i = 1; i < rows; i++)
+	{
+		dp[0] += matrix[i][0];
+		for (int j = 1; j < cols; j++)
+			dp[j] = matrix[i][j] + min(dp[j], dp[j - 1]);
+	}
+	return dp[cols - 1];
+}
+
+// Bob's Survival Probability After k Moves 
+// Time and Space Complexity: O(N * M * k * 4) and O(N * M * k)
+int movesDP[4][2] = { {-1,0},{1,0},{0,-1},{0,1} };
+
+double findProbabilityDP(int N, int M, int row, int col, int k) {
+
+	vector<vector<vector<double>>> dp(N, vector<vector<double>>(M, vector<double>(k + 1, 0.0)));
+
+	dp[row][col][k] = 1.0;
+
+	for (int step = k; step > 0; step--)
+		for (int i = 0; i < N; i++)
+			for (int j = 0; j < M; j++)
+				if (dp[i][j][step] > 0.0) {
+					for (int m = 0; m < 4; m++) {
+						int newRow = i + movesDP[m][0];
+						int newCol = j + movesDP[m][1];
+
+						if (newRow >= 0 && newRow < N && newCol >= 0 && newCol < M) {
+							dp[newRow][newCol][step - 1] += dp[i][j][step] / 4.0;
+						}
+					}
+				}
+
+	// After processing all steps, sum the probabilities at step 0
+	double result = 0.0;
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; ++j) {
+			result += dp[i][j][0];
+		}
+	}
+	return result;
+}
+
+// Kill Probability Time and Space Complexity: O(N * M * K) and O(N * K)
+double killProbability(int N, int M, int K) {
+	vector<vector<double>> dp(N + 1, vector<double>(K + 1, 0.0));
+
+	for (int j = 0; j <= K; ++j)
+		dp[0][j] = 1.0;
+
+	for (int attack = 1; attack <= K; ++attack)
+		for (int health = 0; health <= N; ++health)
+			for (int damage = 0; damage <= M; ++damage) {
+				int newHealth = health - damage;
+
+				if (newHealth <= 0)
+					dp[health][attack] += 1.0 / (M + 1);
+
+				else
+					dp[health][attack] += dp[newHealth][attack - 1] / (M + 1);
+			}
+
+	return dp[N][K];
+}
+
+// Min Coins  Time and Space Complexity: O(n * aim) and O(aim)
+int minCoinsDP(int aim, const vector<int>& arr) {
+	vector<int> dp(aim + 1, INT_MAX);
+	dp[0] = 0;
+
+	for (int i = 1; i <= aim; i++)
+		for (int coin : arr)
+			/*int res = minCoins(aim - coin, arr, memo);
+			if (res != INT_MAX)
+				minCoinsNeeded = min(minCoinsNeeded, res + 1);*/
+			if (i >= coin && dp[i - coin] != INT_MAX) {
+				dp[i] = min(dp[i], dp[i - coin] + 1);
+			}
+	return dp[aim] == INT_MAX ? -1 : dp[aim];
+}
+
+// Integer Partition with Decreasing Parts
+int countPartitionsDP(int n) {
+	vector<vector<int>> dp(n + 1, vector<int>(n + 1, 0));
+
+	for (int j = 0; j <= n; j++)
+		dp[0][j] = 1;
+
+	for (int i = 1; i <= n; i++)
+		for (int j = 1; j <= n; j++) {
+			dp[i][j] = dp[i][j - 1];
+
+			//result += countPartitions(n - k, k - 1, memo);
+			if (i >= j) {
+				dp[i][j] += dp[i - j][j - 1];
+			}
+		}
+
+	return dp[n][n];
+}
+
+// Partition an Array into Two Subsets with Minimal Difference
+// Time and Space Complexity: O(i * rest / 2) and O(i * rest / 2)
+int closestSumDP(const vector<int> arr, int total) {
+	int n = arr.size();
+	int half = total / 2;
+
+	vector<vector<int>> dp(n + 1, vector<int>(half + 1, 0));
+
+	for (int i = n - 1; i >= 0; i--) {
+		for (int rest = 0; rest <= half; rest++) {
+			int excludeCurrent = dp[i + 1][rest];
+			int includeCurrent = 0;
+			if (arr[i] <= rest)
+				includeCurrent = arr[i] + dp[i][rest - arr[i]];
+			dp[i][rest] = max(excludeCurrent, includeCurrent);
+		}
+	}
+	return dp[0][half];
+}
+
+
+// Partition Two Balanced Subsets with Minimal Difference
+// Time and Space Complexity: O(n^2 * sum) and O(n^2 * sum)
+int partitionBSDP(const vector<int>& arr) {
+	if (arr.empty() || arr.size() < 2) return 0;
+
+	
+	int half = 0;
+	for (int num : arr) half += num;
+	half /= 2;
+	int n = arr.size();
+	int m = (n + 1) / 2;
+
+	vector<vector<vector<int>>> dp(n + 1,
+		vector<vector<int>>(m + 1, vector<int>(half + 1, -1)));
+
+	/*if (i == arr.size())
+		return picks == 0 ? 0 : -1;*/
+	for (int rest = 0; rest <= half; rest++)
+		dp[n][0][rest] = 0;
+
+	for (int i = n - 1; i >= 0; i--)
+		for (int picks = 0; picks <= m; picks++)
+			for (int rest = 0; rest <= half; rest++) {
+				int includeCurrent = dp[i + 1][picks][rest];
+
+				int excludeCurrent = -1;
+				int next = -1;
+				if (picks >= 1 && arr[i] <= rest) {
+					next = dp[i + 1][picks - 1][rest - arr[i]];
+				}
+				if (next != -1) {
+					includeCurrent = arr[i] + next;
+				}
+				dp[i][picks][rest] = max(includeCurrent, excludeCurrent);
+			}
+
+	int evenResult = dp[0][n / 2][half];
+	int oddResult = dp[0][n / 2 + 1][half];
+
+	return n % 2 == 0 ? evenResult : max(evenResult, oddResult);
 }
