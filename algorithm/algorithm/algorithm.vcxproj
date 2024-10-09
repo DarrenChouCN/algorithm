@@ -60,6 +60,7 @@
     <ClCompile Include="greedy\ClassicalGreedyAlgorithms.cpp" />
     <ClCompile Include="greedy\HeapSort.cpp" />
     <ClCompile Include="pointer-manipulation\MultiplePointers.cpp" />
+    <ClCompile Include="pointer-manipulation\SlidingWindow.cpp" />
     <ClCompile Include="pointer-manipulation\TwoPointers.cpp" />
   </ItemGroup>
   <ItemGroup>
