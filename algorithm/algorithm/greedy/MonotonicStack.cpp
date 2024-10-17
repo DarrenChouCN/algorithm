@@ -188,3 +188,146 @@ int maximalRectangle(vector<vector<char>>& matrix) {
 
 	return maxArea;
 }
+
+
+/*
+Count Submatrices With All Ones
+Given an m x n binary matrix mat, return the number of submatrices that have all ones.
+
+1. Matrix Compression: Convert the matrix into a 1D array by compressing each row into heights. This transforms the problem into the Maximal Rectangle problem, allowing the use of the monotonic stack technique to solve it efficiently.
+2. Monotonic Stack Processing:
+	Step 1: Use a monotonic stack to process each region and compute the result for that region.
+	Step 2: To avoid double-counting caused by equal heights leading to redundant calculations when popping from the stack, ensure that the condition 'if (height[cur] > height[i])' is used to exclude these cases.
+	Step 3: Compute the width of the region, i.e., the distance between the current position and the left boundary. This is given by 'n = i - left - 1'.
+	Step 4: Calculate the height of the region, which is the height difference between the current element and the left boundary, i.e., 'difference = height[cur] - height[left]'.
+	Step 5: Count the number of subarrays where the current element is the minimum. The formula to calculate the number of subarrays is n * (n + 1) / 2, where n is the width of the region.
+	Step 6: Accumulate the total area or count of submatrices that satisfy the conditions.
+
+Time and Space Complexity: O(m*n) and O(n)
+*/
+int countFromBottom(const vector<int>& heights) {
+	if (heights.empty()) return 0;
+
+	int top = -1; // Stack pointer
+	int nums = 0;
+	int n = heights.size();
+	vector<int> stack(n);
+
+	for (int i = 0; i < n; i++)
+	{
+		while (top != -1 && heights[stack[top]] >= heights[i]) {
+			int cur = stack[top--];
+			if (heights[cur] > heights[i]) {
+				int left = (top == -1) ? -1 : stack[top];
+				int width = i - left - 1;
+				int subarrayCount = (width * (width + 1)) / 2;
+
+				int down = max((left == -1 ? 0 : heights[left]), heights[i]);
+				int heightDifference = heights[cur] - down;
+
+				nums += heightDifference * subarrayCount;
+			}
+		}
+		stack[++top] = i;
+	}
+
+	while (top != -1) {
+		int cur = stack[top--];
+
+		int left = (top == -1) ? -1 : stack[top];
+		int width = n - left - 1;
+		int subarrayCount = (width * (width + 1)) / 2;
+
+		int down = (left == -1) ? 0 : heights[left];
+		int heightDifference = heights[cur] - down;
+
+		nums += heightDifference * subarrayCount;
+	}
+
+	return nums;
+}
+
+int numSubmat(vector<vector<int>>& mat) {
+	if (mat.empty() || mat[0].empty()) return 0;
+
+	int nums = 0;
+	vector<int> height(mat[0].size(), 0);
+
+	for (int i = 0; i < mat.size(); i++)
+	{
+		for (int j = 0; j < mat[0].size(); j++) {
+			height[j] = (mat[i][j] == 0) ? 0 : height[j] + 1;
+		}
+		nums += countFromBottom(height);
+	}
+
+	return nums;
+}
+
+/*
+Sum of Subarray Minimums
+Given an array of integers arr, find the sum of 'min(b)', where 'b' ranges over every (contiguous) subarray of 'arr'. Since the answer may be large, return the answer modulo '10^9 + 7'.
+*/
+vector<int> nearLessEqualLeft(const vector<int>& arr) {
+	int n = arr.size();
+	vector<int> left(n);
+	stack<int> s;
+
+	for (int i = n - 1; i >= 0; i--)
+	{
+		while (!s.empty() && arr[s.top()] >= arr[i]) {
+			left[s.top()] = i;
+			s.pop();
+		}
+		s.push(i);
+	}
+	while (!s.empty()) {
+		left[s.top()] = -1;
+		s.pop();
+	}
+
+	return left;
+}
+
+vector<int> nearLessRight(const vector<int>& arr) {
+	int n = arr.size();
+	vector<int> right(n);
+	stack<int> s;
+
+	for (int i = 0; i < n; i++)
+	{
+		while (!s.empty() && arr[s.top()] > arr[i]) {
+			right[s.top()] = i;
+			s.pop();
+		}
+		s.push(i);
+	}
+	while (!s.empty()) {
+		right[s.top()] = n;
+		s.pop();
+	}
+
+	return right;
+}
+
+const int MOD = 1000000007;
+
+int sumSubarrayMins(vector<int>& arr) {
+	int n = arr.size();
+	vector<int> left = nearLessEqualLeft(arr);
+	vector<int> right = nearLessRight(arr);
+
+	long long ans = 0;
+	for (int i = 0; i < n; i++) {
+		long long start = i - left[i];
+		long long end = right[i] - i;
+		ans = (ans + start * end * arr[i]) % MOD;
+	}
+	return (int)ans;
+}
+
+int main() {
+	vector<int> arr = { 3, 1, 2, 4 }; // Example input
+	cout << "Sum of Subarray Minimums: " << sumSubarrayMins(arr) << endl;
+	return 0;
+}

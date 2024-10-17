@@ -147,6 +147,9 @@
     <ClCompile Include="greedy\MonotonicStack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="mathematics\MatrixExponentiation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h">
