@@ -150,6 +150,9 @@
     <ClCompile Include="mathematics\MatrixExponentiation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="greedy\KMP.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h">

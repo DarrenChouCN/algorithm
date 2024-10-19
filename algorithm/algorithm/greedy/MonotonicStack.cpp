@@ -325,9 +325,3 @@ int sumSubarrayMins(vector<int>& arr) {
 	}
 	return (int)ans;
 }
-
-int main() {
-	vector<int> arr = { 3, 1, 2, 4 }; // Example input
-	cout << "Sum of Subarray Minimums: " << sumSubarrayMins(arr) << endl;
-	return 0;
-}

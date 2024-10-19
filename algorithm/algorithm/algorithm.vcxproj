@@ -59,6 +59,7 @@
     <ClCompile Include="dynamic-programming\StructuredRecursion.cpp" />
     <ClCompile Include="greedy\ClassicalGreedyAlgorithms.cpp" />
     <ClCompile Include="greedy\HeapSort.cpp" />
+    <ClCompile Include="greedy\KMP.cpp" />
     <ClCompile Include="greedy\MonotonicStack.cpp" />
     <ClCompile Include="mathematics\MatrixExponentiation.cpp" />
     <ClCompile Include="pointer-manipulation\MultiplePointers.cpp" />
