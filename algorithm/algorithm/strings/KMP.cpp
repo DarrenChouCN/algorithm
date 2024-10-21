@@ -1,6 +1,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include "../common.h"
 
 using namespace std;
 
@@ -16,23 +17,23 @@ Generating the Prefix Function Array ¦Ð
 */
 vector<int> computePrefixFunction(const string& pattern) {
 	int n = pattern.length();
-	vector<int> pi(n, 0);
+	vector<int> next(n, 0);
 	int prefixLen = 0;
 
 	for (int i = 1; i < n; i++)
 	{
 		while (prefixLen > 0 && pattern[prefixLen] != pattern[i]) {
-			prefixLen = pi[prefixLen - 1];
+			prefixLen = next[prefixLen - 1];
 		}
 
 		if (pattern[i] == pattern[prefixLen]) {
 			prefixLen++;
 		}
 
-		pi[i] = prefixLen;
+		next[i] = prefixLen;
 	}
 
-	return pi;
+	return next;
 }
 
 /*
@@ -40,15 +41,15 @@ The logic of the KMP algorithm is similar to that of generating the prefix funct
 
 The difference is that generating the prefix function array operates only on the pattern, recording the matching between its prefixes and suffixes, while the KMP algorithm uses the precomputed ¦Ð array to efficiently search for the pattern within a text, optimizing the matching process.
 */
-vector<int> KMP(const string& text, const string& pattern) {
-	vector<int> pi = computePrefixFunction(pattern);
+vector<int> KMP1(const string& text, const string& pattern) {
+	vector<int> next = computePrefixFunction(pattern);
 	vector<int> result;
 	int prefixLen = 0;
 
 	for (int i = 0; i < text.length(); i++)
 	{
 		while (prefixLen > 0 && text[i] != pattern[prefixLen]) {
-			prefixLen = pi[prefixLen - 1];
+			prefixLen = next[prefixLen - 1];
 		}
 
 		if (text[i] == pattern[prefixLen]) {
@@ -57,9 +58,68 @@ vector<int> KMP(const string& text, const string& pattern) {
 
 		if (prefixLen == pattern.length()) {
 			result.push_back(i - pattern.length() + 1);
-			prefixLen = pi[prefixLen - 1];
+			prefixLen = next[prefixLen - 1];
 		}
 
 	}
 	return result;
+}
+
+bool KMP2(const string& text, const string& pattern) {
+	vector<int> next = computePrefixFunction(pattern);
+	int prefixLen = 0;
+
+	for (int i = 0; i < text.length(); i++) {
+		while (prefixLen > 0 && text[i] != pattern[prefixLen]) {
+			prefixLen = next[prefixLen - 1];
+		}
+		if (text[i] == pattern[prefixLen]) {
+			prefixLen++;
+		}
+		if (prefixLen == pattern.length()) {
+			return true;
+		}
+	}
+	return false;
+}
+
+/*
+Rotate String Using KMP Algorithm
+Given two strings s1 and s2, determine if s2 is a rotation of s1. A string rotation means moving characters from the beginning of the string to the end while preserving their order.
+
+To determine if s2 is a rotation of s1, concatenate s1 with itself, effectively creating a string double the length of s1. Then use the KMP algorithm to check if s2 is a substring of the extended string. If it is, s2 is a rotation of s1; otherwise, it is not.
+
+Time and Space Complexity:  O(n + m) and O(m)
+*/
+bool isRotation(string s1, string s2) {
+	if (s1.size() != s2.size()) return false;
+	string extendedS1 = s1 + s1;
+	return KMP2(extendedS1, s2);
+}
+
+
+/*
+Is Subtree Using KMP Algorithm
+Given the roots of two binary trees, root and subRoot, determine if subRoot is a subtree of root. A subtree of a binary tree root is a tree consisting of a node in root and all of its descendants. The subtree can also be the entire tree root itself.
+
+Serialize both trees into strings using a preorder traversal, and then use the KMP algorithm to compare them to determine whether one tree is a subtree of the other.
+
+Time and Space Complexity:  O(n + m) and O(m)
+*/
+void serialize(TreeNode* root, string& res) {
+	if (!root) {
+		res += "# ";
+		return;
+	}
+	res += to_string(root->val) + " ";
+	serialize(root->left, res);
+	serialize(root->right, res);
+}
+
+bool isSubtree(TreeNode* root, TreeNode* subRoot) {
+	string treeStr = "", subTreeStr = "";
+	serialize(root, treeStr);
+	serialize(subRoot, subTreeStr);
+
+	return KMP2(treeStr, subTreeStr);
 }

@@ -150,7 +150,10 @@
     <ClCompile Include="mathematics\MatrixExponentiation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="greedy\KMP.cpp">
+    <ClCompile Include="strings\KMP.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="strings\Manacher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
