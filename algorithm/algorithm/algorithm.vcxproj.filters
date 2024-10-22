@@ -156,6 +156,9 @@
     <ClCompile Include="strings\Manacher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="divide-and-conquer\BFPRT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h">

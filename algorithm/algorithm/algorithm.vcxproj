@@ -53,6 +53,7 @@
     <ClCompile Include="basic-data-structure\Tree.cpp" />
     <ClCompile Include="basic-data-structure\Trie.cpp" />
     <ClCompile Include="distribution-based\RadixSort.cpp" />
+    <ClCompile Include="divide-and-conquer\BFPRT.cpp" />
     <ClCompile Include="divide-and-conquer\MergeSort.cpp" />
     <ClCompile Include="divide-and-conquer\QuickSort.cpp" />
     <ClCompile Include="dynamic-programming\DynamicProgramming.cpp" />
