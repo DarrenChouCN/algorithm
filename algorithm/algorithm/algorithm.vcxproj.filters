@@ -162,6 +162,9 @@
     <ClCompile Include="pointer-manipulation\MorrisTraversal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="divide-and-conquer\SegmentTree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h">
