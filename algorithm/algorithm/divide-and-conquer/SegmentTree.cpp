@@ -1,4 +1,6 @@
 #include <vector>
+#include <map>
+#include <algorithm>
 
 using namespace std;
 
@@ -154,5 +156,105 @@ public:
 		}
 		return result;
 	}
+};
 
+/*
+Falling Squares
+
+There are several squares being dropped onto the X-axis of a 2D plane.
+You are given a 2D integer array positions where positions[i] = [lefti, sideLengthi] represents the ith square with a side length of sideLengthi that is dropped with its left edge aligned with X-coordinate lefti.
+Each square is dropped one at a time from a height above any landed squares. It then falls downward (negative Y direction) until it either lands on the top side of another square or on the X-axis. A square brushing the left/right side of another square does not count as landing on it. Once it lands, it freezes in place and cannot be moved.
+After each square is dropped, you must record the height of the current tallest stack of squares.
+Return an integer array ans where ans[i] represents the height described above after dropping the ith square.
+*/
+class FallingSquares {
+
+public:
+	vector<int> fallingSquares(vector<vector<int>>& positions) {
+		map<int, int> coordinateCompression;
+		for (const auto& pos : positions) {
+			int left = pos[0];
+			int right = pos[0] + pos[1] - 1;
+			coordinateCompression[left];
+			coordinateCompression[right];
+		}
+
+		int idx = 0;
+		for (auto& entry : coordinateCompression) {
+			entry.second = ++idx;
+		}
+
+		class SegmentTree {
+		private:
+			int n;
+			vector<int> tree, lazy;
+
+			void pushDown(int root, int left, int right) {
+				if (lazy[root] != 0) {
+					tree[root] = max(tree[root], lazy[root]);
+					if (left != right) {
+						lazy[root * 2] = max(lazy[root * 2], lazy[root]);
+						lazy[root * 2 + 1] = max(lazy[root * 2 + 1], lazy[root]);
+					}
+					lazy[root] = 0;
+				}
+			}
+
+			void updateRange(int L, int R, int value, int left, int right, int root) {
+				pushDown(root, left, right);
+				if (R<left || L>right)
+					return;
+				if (L <= left && right <= R) {
+					lazy[root] = value;
+					pushDown(root, left, right);
+					return;
+				}
+
+				int mid = (left + right) / 2;
+				updateRange(L, R, value, left, mid, root * 2);
+				updateRange(L, R, value, mid + 1, right, root * 2 + 1);
+				tree[root] = max(tree[root * 2], tree[root * 2 + 1]);
+			}
+
+			int queryRange(int L, int R, int left, int right, int root) {
+				pushDown(root, left, right);
+				if (R<left || L>right)
+					return 0;
+				if (L <= left && right <= R)
+					return tree[root];
+				int mid = (left + right) / 2;
+				return max(queryRange(L, R, left, mid, root * 2),
+					queryRange(L, R, mid + 1, right, root * 2 + 1));
+			}
+
+		public:
+			SegmentTree(int size) :n(size) {
+				tree.resize(4 * n);
+				lazy.resize(4 * n);
+			}
+
+			void update(int L, int R, int value) {
+				updateRange(L, R, value, 1, n, 1);
+			}
+
+			int query(int L, int R) {
+				return queryRange(L, R, 1, n, 1);
+			}
+		};
+
+		SegmentTree segmentTree(idx);
+		vector<int> result;
+		int maxHeight = 0;
+
+		for (const auto& pos : positions) {
+			int left = coordinateCompression[pos[0]];
+			int right = coordinateCompression[pos[0] + pos[1] - 1];
+			int height = segmentTree.query(left, right) + pos[1];
+			segmentTree.update(left, right, height);
+			maxHeight = max(maxHeight, height);
+			result.push_back(maxHeight);
+		}
+
+		return result;
+	}
 };
