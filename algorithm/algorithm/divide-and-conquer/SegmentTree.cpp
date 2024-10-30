@@ -166,24 +166,18 @@ You are given a 2D integer array positions where positions[i] = [lefti, sideLeng
 Each square is dropped one at a time from a height above any landed squares. It then falls downward (negative Y direction) until it either lands on the top side of another square or on the X-axis. A square brushing the left/right side of another square does not count as landing on it. Once it lands, it freezes in place and cannot be moved.
 After each square is dropped, you must record the height of the current tallest stack of squares.
 Return an integer array ans where ans[i] represents the height described above after dropping the ith square.
+
+LeetCode: https://leetcode.cn/problems/falling-squares/
+
+Time and Space Complexity: O(NlogN) and O(N)
 */
 class FallingSquares {
 
 public:
 	vector<int> fallingSquares(vector<vector<int>>& positions) {
-		map<int, int> coordinateCompression;
-		for (const auto& pos : positions) {
-			int left = pos[0];
-			int right = pos[0] + pos[1] - 1;
-			coordinateCompression[left];
-			coordinateCompression[right];
-		}
-
-		int idx = 0;
-		for (auto& entry : coordinateCompression) {
-			entry.second = ++idx;
-		}
-
+		/*
+		In the Falling Squares problem, the main focus is on the maximum height of stacked squares after each block falls. Therefore, the classic segment tree can be simplified and adjusted to retain only the logic for computing maximum values, using only a lazy array for lazy propagation. There is no need to maintain a range sum (sum) as in a traditional segment tree.
+		*/
 		class SegmentTree {
 		private:
 			int n;
@@ -222,9 +216,12 @@ public:
 					return 0;
 				if (L <= left && right <= R)
 					return tree[root];
+
 				int mid = (left + right) / 2;
-				return max(queryRange(L, R, left, mid, root * 2),
-					queryRange(L, R, mid + 1, right, root * 2 + 1));
+				return max(
+					queryRange(L, R, left, mid, root * 2),
+					queryRange(L, R, mid + 1, right, root * 2 + 1)
+				);
 			}
 
 		public:
@@ -242,13 +239,31 @@ public:
 			}
 		};
 
-		SegmentTree segmentTree(idx);
+		/*
+		Coordinate Compression
+		Coordinate compression is used to map original coordinates to a smaller index range, allowing efficient segment tree construction within a limited index space. Through this mapping, original coordinates are quickly converted to compressed indices in O(1) time. The segment tree maintains the maximum height for each interval based on these compressed indices. For each falling square, the interval's current maximum height is queried, a new height is calculated, and the segment tree is updated accordingly. This approach reduces the space complexity of segment tree operations and enables range queries and updates in O(logN) time.
+		*/ 
+		map<int, int> coordinateCompression;
+		for (const auto& pos : positions) {
+			int left = pos[0];
+			int right = pos[0] + pos[1] - 1;
+			coordinateCompression[left];
+			coordinateCompression[right];
+		}
+
+		int idx = 0;
+		for (auto& entry : coordinateCompression) {
+			entry.second = ++idx;
+		}
+
 		vector<int> result;
 		int maxHeight = 0;
+		SegmentTree segmentTree(idx);
 
 		for (const auto& pos : positions) {
 			int left = coordinateCompression[pos[0]];
 			int right = coordinateCompression[pos[0] + pos[1] - 1];
+
 			int height = segmentTree.query(left, right) + pos[1];
 			segmentTree.update(left, right, height);
 			maxHeight = max(maxHeight, height);

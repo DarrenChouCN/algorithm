@@ -535,3 +535,121 @@ public:
 	}
 };
 ```
+
+
+
+## Falling Squares
+There are several squares being dropped onto the X-axis of a 2D plane.
+You are given a 2D integer array positions where positions[i] = [lefti, sideLengthi] represents the ith square with a side length of sideLengthi that is dropped with its left edge aligned with X-coordinate lefti.
+Each square is dropped one at a time from a height above any landed squares. It then falls downward (negative Y direction) until it either lands on the top side of another square or on the X-axis. A square brushing the left/right side of another square does not count as landing on it. Once it lands, it freezes in place and cannot be moved.
+After each square is dropped, you must record the height of the current tallest stack of squares.
+Return an integer array ans where ans[i] represents the height described above after dropping the ith square.
+
+LeetCode: https://leetcode.cn/problems/falling-squares/
+
+Time and Space Complexity: O(NlogN) and O(N)
+
+```cpp
+class FallingSquares {
+
+public:
+	vector<int> fallingSquares(vector<vector<int>>& positions) {
+		/*
+		In the Falling Squares problem, the main focus is on the maximum height of stacked squares after each block falls. Therefore, the classic segment tree can be simplified and adjusted to retain only the logic for computing maximum values, using only a lazy array for lazy propagation. There is no need to maintain a range sum (sum) as in a traditional segment tree.
+		*/
+		class SegmentTree {
+		private:
+			int n;
+			vector<int> tree, lazy;
+
+			void pushDown(int root, int left, int right) {
+				if (lazy[root] != 0) {
+					tree[root] = max(tree[root], lazy[root]);
+					if (left != right) {
+						lazy[root * 2] = max(lazy[root * 2], lazy[root]);
+						lazy[root * 2 + 1] = max(lazy[root * 2 + 1], lazy[root]);
+					}
+					lazy[root] = 0;
+				}
+			}
+
+			void updateRange(int L, int R, int value, int left, int right, int root) {
+				pushDown(root, left, right);
+				if (R<left || L>right)
+					return;
+				if (L <= left && right <= R) {
+					lazy[root] = value;
+					pushDown(root, left, right);
+					return;
+				}
+
+				int mid = (left + right) / 2;
+				updateRange(L, R, value, left, mid, root * 2);
+				updateRange(L, R, value, mid + 1, right, root * 2 + 1);
+				tree[root] = max(tree[root * 2], tree[root * 2 + 1]);
+			}
+
+			int queryRange(int L, int R, int left, int right, int root) {
+				pushDown(root, left, right);
+				if (R<left || L>right)
+					return 0;
+				if (L <= left && right <= R)
+					return tree[root];
+
+				int mid = (left + right) / 2;
+				return max(
+					queryRange(L, R, left, mid, root * 2),
+					queryRange(L, R, mid + 1, right, root * 2 + 1)
+				);
+			}
+
+		public:
+			SegmentTree(int size) :n(size) {
+				tree.resize(4 * n);
+				lazy.resize(4 * n);
+			}
+
+			void update(int L, int R, int value) {
+				updateRange(L, R, value, 1, n, 1);
+			}
+
+			int query(int L, int R) {
+				return queryRange(L, R, 1, n, 1);
+			}
+		};
+
+		/*
+		Coordinate Compression
+		Coordinate compression is used to map original coordinates to a smaller index range, allowing efficient segment tree construction within a limited index space. Through this mapping, original coordinates are quickly converted to compressed indices in O(1) time. The segment tree maintains the maximum height for each interval based on these compressed indices. For each falling square, the interval's current maximum height is queried, a new height is calculated, and the segment tree is updated accordingly. This approach reduces the space complexity of segment tree operations and enables range queries and updates in O(logN) time.
+		*/ 
+		map<int, int> coordinateCompression;
+		for (const auto& pos : positions) {
+			int left = pos[0];
+			int right = pos[0] + pos[1] - 1;
+			coordinateCompression[left];
+			coordinateCompression[right];
+		}
+
+		int idx = 0;
+		for (auto& entry : coordinateCompression) {
+			entry.second = ++idx;
+		}
+
+		vector<int> result;
+		int maxHeight = 0;
+		SegmentTree segmentTree(idx);
+
+		for (const auto& pos : positions) {
+			int left = coordinateCompression[pos[0]];
+			int right = coordinateCompression[pos[0] + pos[1] - 1];
+
+			int height = segmentTree.query(left, right) + pos[1];
+			segmentTree.update(left, right, height);
+			maxHeight = max(maxHeight, height);
+			result.push_back(maxHeight);
+		}
+
+		return result;
+	}
+};
+```

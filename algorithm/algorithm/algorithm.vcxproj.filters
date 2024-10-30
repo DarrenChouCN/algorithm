@@ -165,6 +165,9 @@
     <ClCompile Include="divide-and-conquer\SegmentTree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="randomized\ReservoirSampling.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h">
