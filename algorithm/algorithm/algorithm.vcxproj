@@ -52,6 +52,7 @@
     <ClCompile Include="basic-data-structure\Graph.cpp" />
     <ClCompile Include="basic-data-structure\Tree.cpp" />
     <ClCompile Include="basic-data-structure\Trie.cpp" />
+    <ClCompile Include="bitwise-operations\FenwickTree.cpp" />
     <ClCompile Include="distribution-based\RadixSort.cpp" />
     <ClCompile Include="divide-and-conquer\BFPRT.cpp" />
     <ClCompile Include="divide-and-conquer\MergeSort.cpp" />
@@ -63,6 +64,7 @@
     <ClCompile Include="greedy\HeapSort.cpp" />
     <ClCompile Include="pointer-manipulation\MorrisTraversal.cpp" />
     <ClCompile Include="randomized\ReservoirSampling.cpp" />
+    <ClCompile Include="strings\AhoCorasickAutomation.cpp" />
     <ClCompile Include="strings\KMP.cpp" />
     <ClCompile Include="greedy\MonotonicStack.cpp" />
     <ClCompile Include="mathematics\MatrixExponentiation.cpp" />

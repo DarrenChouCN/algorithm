@@ -42,7 +42,7 @@ vector<int> reservoirSampling(const vector<int>& stream, int k) {
 	return reservoir;
 }
 
-int main() {
+int mainReservoirSampling() {
 	srand(time(0));  // Set the random seed
 
 	// Simulated data stream
