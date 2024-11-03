@@ -92,3 +92,87 @@ int bfprt(vector<int>& medianArray, int L, int R, int k) {
 int minKth(vector<int>& arr, int k) {
 	return bfprt(arr, 0, arr.size() - 1, k);
 }
+
+// Max Top 1 : Sorting
+// Time and Space Complexity: O(NlogN) and O(K)
+vector<int> maxTop1(vector<int>& arr, int k) {
+	if (arr.empty()) 
+		return vector<int>();
+	
+
+	int N = arr.size();
+	k = min(N, k); 
+
+	sort(arr.begin(), arr.end()); 
+
+	vector<int> ans(k);
+	for (int i = N - 1, j = 0; j < k; i--, j++) {
+		ans[j] = arr[i]; 
+	}
+
+	return ans;
+}
+
+
+// Max Top 2 : heap
+// Time and Space Complexity: O(N + KlogN) and O(K) 
+void swap(vector<int>& arr, int i, int j) {
+	int temp = arr[i];
+	arr[i] = arr[j];
+	arr[j] = temp;
+}
+
+void heapInsert(vector<int>& arr, int index) {
+	while (index > 0 && arr[index] > arr[(index - 1) / 2]) {
+		swap(arr, index, (index - 1) / 2);
+		index = (index - 1) / 2;
+	}
+}
+
+void heapify(vector<int>& arr, int index, int heapSize) {
+	int left = 2 * index + 1;
+	while (left < heapSize) {
+		int largest = (left + 1 < heapSize && arr[left + 1] > arr[left]) ?
+			left + 1 : left;
+		largest = arr[largest] > arr[index] ? largest : index;
+
+		if (largest == index) 
+			break;
+
+		swap(arr, largest, index);
+		index = largest;
+		left = 2 * index + 1;
+	}
+}
+
+vector<int> maxTopK2(vector<int>& arr, int k) {
+	if (arr.empty()) {
+		return vector<int>();
+	}
+
+	int N = arr.size();
+	k = min(N, k);
+
+	// Build the max heap
+	for (int i = N - 1; i >= 0; i--) {
+		heapify(arr, i, N);
+	}
+
+	// Extract the top k elements
+	int heapSize = N;
+	swap(arr, 0, --heapSize);
+	int count = 1;
+
+	while (heapSize > 0 && count < k) {
+		heapify(arr, 0, heapSize);
+		swap(arr, 0, --heapSize);
+		count++;
+	}
+
+	vector<int> ans(k);
+	for (int i = N - 1, j = 0; j < k; i--, j++) {
+		ans[j] = arr[i];
+	}
+
+	return ans;
+}

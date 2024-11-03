@@ -33,111 +33,109 @@ Overall Time and Space Complexity: O(M + N) and O(M \times ¦² + K)
 */
 class Node {
 public:
-    string end;
-    bool endUse;
-    Node* fail;
-    Node* nexts[26];
+	string word;
+	bool isMatched;
+	Node* fail;
+	Node* children[26];
 
-    Node() : end(""), endUse(false), fail(nullptr) {
-        for (int i = 0; i < 26; i++) {
-            nexts[i] = nullptr;
-        }
-    }
+	Node() : word(""), isMatched(false), fail(nullptr) {
+		for (int i = 0; i < 26; i++) {
+			children[i] = nullptr;
+		}
+	}
 };
 
-class ACAutomation {
-private:
-    Node* root;
-
+class AhoCorasick {
 public:
-    ACAutomation() {
-        root = new Node();
-    }
+	Node* root;
 
-    void insert(const string& s) {
-        Node* cur = root;
-        for (char ch : s) {
-            int index = ch - 'a';
-            if (cur->nexts[index] == nullptr) {
-                cur->nexts[index] = new Node();
-            }
-            cur = cur->nexts[index];
-        }
-        cur->end = s;
-    }
+	AhoCorasick() {
+		root = new Node();
+	}
 
-    void build() {
-        queue<Node*> q;
-        q.push(root);
+	void insert(const string& pattern) {
+		Node* cur = root;
+		for (char ch : pattern) {
+			int index = ch - 'a';
+			if (!cur->children[index]) {
+				cur->children[index] = new Node();
+			}
+			cur = cur->children[index];
+		}
+		cur->word = pattern;
+	}
 
-        while (!q.empty()) {
-            Node* cur = q.front();
-            q.pop();
+	void buildFailureLinks() {
+		queue<Node*> q;
+		q.push(root);
 
-            for (int i = 0; i < 26; ++i) {
-                if (cur->nexts[i] != nullptr) {
-                    Node* fail = cur->fail;
-                    while (fail != nullptr && fail->nexts[i] == nullptr) {
-                        fail = fail->fail;
-                    }
-                    cur->nexts[i]->fail = (fail != nullptr) ? fail->nexts[i] : root;
-                    q.push(cur->nexts[i]);
-                }
-            }
-        }
-    }
+		while (!q.empty()) {
+			Node* cur = q.front();
+			q.pop();
 
-    vector<string> containWords(const string& content) {
-        vector<string> ans;
-        Node* cur = root;
+			for (int i = 0; i < 26; ++i) {
+				if (cur->children[i]) {
+					Node* fail = cur->fail;
+					while (fail && !fail->children[i]) {
+						fail = fail->fail;
+					}
+					cur->children[i]->fail = fail ? fail->children[i] : root;
+					q.push(cur->children[i]);
+				}
+			}
+		}
+	}
 
-        for (char ch : content) {
-            int index = ch - 'a';
-            while (cur->nexts[index] == nullptr && cur != root) {
-                cur = cur->fail;
-            }
-            cur = (cur->nexts[index] != nullptr) ? cur->nexts[index] : root;
+	vector<string> search(const string& content) {
+		vector<string> result;
+		Node* cur = root;
 
-            Node* follow = cur;
-            while (follow != root) {
-                if (follow->endUse) break;
-                if (!follow->end.empty()) {
-                    ans.push_back(follow->end);
-                    follow->endUse = true;
-                }
-                follow = follow->fail;
-            }
-        }
+		for (char ch : content) {
+			int index = ch - 'a';
+			while (!cur->children[index] && cur != root) {
+				cur = cur->fail;
+			}
+			cur = cur->children[index] ? cur->children[index] : root;
 
-        return ans;
-    }
+			Node* follow = cur;
+			while (follow != root) {
+				if (follow->isMatched) break;
+				if (!follow->word.empty()) {
+					result.push_back(follow->word);
+					follow->isMatched = true;
+				}
+				follow = follow->fail;
+			}
+		}
 
-    ~ACAutomation() {
-        deleteTrie(root);
-    }
+		return result;
+	}
 
-private:
-    void deleteTrie(Node* node) {
-        if (node == nullptr) return;
-        for (Node* child : node->nexts) {
-            deleteTrie(child);
-        }
-        delete node;
-    }
+	void deleteTrie(Node* node) {
+		if (!node) return;
+		for (Node* child : node->children) {
+			deleteTrie(child);
+		}
+		delete node;
+	}
+
+	~AhoCorasick() {
+		deleteTrie(root);
+	}
 };
 
-int main() {
-    ACAutomation ac;
-    ac.insert("dhess");
-    ac.insert("heaa");
-    ac.insert("abcdheks");
+int mainAhoCorasick() {
+	AhoCorasick ac;
+	ac.insert("dhe");
+	ac.insert("he");
+	ac.insert("abcdheks");
 
-    ac.build();
+	ac.buildFailureLinks();
 
-    vector<string> contains = ac.containWords("abcdhekskdjfafhasldkflskdjhwqaeruv");
-    for (const string& word : contains) {
-        cout << word << endl;
-    }
+	vector<string> contains = ac.search("abcdhekskdjfafhasldkflskdjhwqaeruv");
+	for (const string& word : contains) {
+		cout << word << endl;
+	}
 
-    return 0;
+	return 0;
 }
