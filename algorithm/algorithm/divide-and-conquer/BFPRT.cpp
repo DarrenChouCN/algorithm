@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <cstdlib>
 
 using namespace std;
 
@@ -96,18 +97,18 @@ int minKth(vector<int>& arr, int k) {
 // Max Top 1 : Sorting
 // Time and Space Complexity: O(NlogN) and O(K)
 vector<int> maxTop1(vector<int>& arr, int k) {
-	if (arr.empty()) 
+	if (arr.empty())
 		return vector<int>();
-	
+
 
 	int N = arr.size();
-	k = min(N, k); 
+	k = min(N, k);
 
-	sort(arr.begin(), arr.end()); 
+	sort(arr.begin(), arr.end());
 
 	vector<int> ans(k);
 	for (int i = N - 1, j = 0; j < k; i--, j++) {
-		ans[j] = arr[i]; 
+		ans[j] = arr[i];
 	}
 
 	return ans;
@@ -136,7 +137,7 @@ void heapify(vector<int>& arr, int index, int heapSize) {
 			left + 1 : left;
 		largest = arr[largest] > arr[index] ? largest : index;
 
-		if (largest == index) 
+		if (largest == index)
 			break;
 
 		swap(arr, largest, index);
@@ -172,6 +173,55 @@ vector<int> maxTopK2(vector<int>& arr, int k) {
 	vector<int> ans(k);
 	for (int i = N - 1, j = 0; j < k; i--, j++) {
 		ans[j] = arr[i];
+	}
+
+	return ans;
+}
+
+// Max Top 3 : partition
+// Time and Space Complexity: O(n + k * logk) and O(K) 
+int minKth(vector<int>& arr, int index) {
+	int L = 0;
+	int R = arr.size() - 1;
+	while (L < R) {
+		int pivot = arr[L + rand() % (R - L + 1)];
+		vector<int> range = partition(arr, L, R, pivot);
+		if (index < range[0]) {
+			R = range[0] - 1;
+		}
+		else if (index > range[1]) {
+			L = range[1] + 1;
+		}
+		else {
+			return pivot;
+		}
+	}
+	return arr[L];
+}
+
+
+vector<int> maxTopK3(vector<int>& arr, int k) {
+	if (arr.empty())
+		return vector<int>();
+
+	int N = arr.size();
+	k = min(N, k);
+
+	int num = minKth(arr, N - k);
+	vector<int> ans(k);
+	int index = 0;
+
+	for (int i = 0; i < N; i++)
+		if (arr[i] > num)
+			ans[index++] = arr[i];
+
+	while (index < k)
+		ans[index++] = num;
+
+	sort(ans.begin(), ans.end());
+
+	for (int L = 0, R = k - 1; L < R; L++, R--) {
+		swap(ans[L], ans[R]);
 	}
 
 	return ans;

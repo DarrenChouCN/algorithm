@@ -174,6 +174,9 @@
     <ClCompile Include="strings\AhoCorasickAutomation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="basic-data-structure\UnionFind.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h">

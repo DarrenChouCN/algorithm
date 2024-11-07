@@ -52,6 +52,7 @@
     <ClCompile Include="basic-data-structure\Graph.cpp" />
     <ClCompile Include="basic-data-structure\Tree.cpp" />
     <ClCompile Include="basic-data-structure\Trie.cpp" />
+    <ClCompile Include="basic-data-structure\UnionFind.cpp" />
     <ClCompile Include="bitwise-operations\FenwickTree.cpp" />
     <ClCompile Include="distribution-based\RadixSort.cpp" />
     <ClCompile Include="divide-and-conquer\BFPRT.cpp" />
