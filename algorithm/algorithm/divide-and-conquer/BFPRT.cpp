@@ -123,7 +123,7 @@ void swap(vector<int>& arr, int i, int j) {
 	arr[j] = temp;
 }
 
-void heapInsert(vector<int>& arr, int index) {
+void heapInsert2(vector<int>& arr, int index) {
 	while (index > 0 && arr[index] > arr[(index - 1) / 2]) {
 		swap(arr, index, (index - 1) / 2);
 		index = (index - 1) / 2;
@@ -180,7 +180,7 @@ vector<int> maxTopK2(vector<int>& arr, int k) {
 
 // Max Top 3 : partition
 // Time and Space Complexity: O(n + k * logk) and O(K) 
-int minKth(vector<int>& arr, int index) {
+int minKth3(vector<int>& arr, int index) {
 	int L = 0;
 	int R = arr.size() - 1;
 	while (L < R) {

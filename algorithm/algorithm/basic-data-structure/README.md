@@ -505,17 +505,111 @@ public:
 		return sizeMap.size();
 	}
 };
+
+class UnionFindArray {
+public:
+	vector<int> parent, size, path;
+	int numSets, rows, cols;
+	bool isDynamicArray = false;
+	// Constructor for a one-dimensional Union-Find
+	UnionFindArray(int N) : parent(N), size(N, 1), path(N), numSets(N) {
+		for (int i = 0; i < N; i++) {
+			parent[i] = i;
+		}
+	}
+
+	// Constructor for a two-dimensional grid-based Union-Find
+	UnionFindArray(int m, int n) {
+		numSets = 0;
+		rows = m;
+		cols = n;
+		int totalsCells = rows * cols;
+		parent.resize(totalsCells);
+		size.resize(totalsCells);
+		path.resize(totalsCells);
+	}
+
+	int getIndex(int r, int c) {
+		return r * cols + c;
+	}
+
+	int connect(int r, int c) {
+		int index = getIndex(r, c);
+		if (size[index] == 0) {
+			parent[index] = index;
+			size[index] = 1;
+			numSets++;
+
+			unionSets(r - 1, c, r, c);
+			unionSets(r + 1, c, r, c);
+			unionSets(r, c - 1, r, c);
+			unionSets(r, c + 1, r, c);
+		}
+		return numSets;
+	}
+
+	int findRoot(int i) {
+		int helperIndex = 0;
+		while (i != parent[i]) {
+			path[helperIndex++] = i;
+			i = parent[i];
+		}
+
+		for (helperIndex--; helperIndex >= 0; helperIndex--)
+			parent[path[helperIndex]] = i;
+
+		return i;
+	}
+
+	void setDynamicArray() {
+		isDynamicArray = true;
+	}
+
+	void unionSets(int row1, int col1, int row2, int col2) {
+		if (row1 < 0 || row1 == rows || row2 < 0 || row2 == rows
+			|| col1 < 0 || col1 == cols || col2 < 0 || col2 == cols)
+			return;
+
+		int index1 = getIndex(row1, col1);
+		int index2 = getIndex(row2, col2);
+
+		if (isDynamicArray && (size[index1] == 0 || size[index2] == 0)) {
+			return;
+		}
+
+		unionSets(index1, index2);
+	}
+
+	void unionSets(int index1, int index2) {
+		int root1 = findRoot(index1);
+		int root2 = findRoot(index2);
+		if (root1 != root2) {
+			if (size[root1] >= size[root2]) {
+				size[root1] += size[root2];
+				parent[root2] = root1;
+			}
+			else {
+				size[root2] += size[root1];
+				parent[root1] = root2;
+			}
+			numSets--;
+		}
+	}
+
+	int getSetCount() const {
+		return numSets;
+	}
+};
 ```
 
-## Number of Provinces 
+/*
+Number of Provinces
+
 https://leetcode.com/problems/friend-circles/
 
 There are n cities. Some of them are connected, while some are not. If city a is connected directly with city b, and city b is connected directly with city c, then city a is connected indirectly with city c.
-
 A province is a group of directly or indirectly connected cities and no other cities outside of the group.
-
 You are given an n x n matrix isConnected where isConnected[i][j] = 1 if the ith city and the jth city are directly connected, and isConnected[i][j] = 0 otherwise.
-
 Return the total number of provinces.
 
 1. Matrix Symmetry: Since city connections form an undirected graph, the matrix isConnected is symmetric. Only half of the matrix needs to be traversed, reducing redundant checks.
@@ -523,68 +617,127 @@ Return the total number of provinces.
 3. Union-Find Efficiency: With path compression and union by rank, Union-Find operations are nearly constant, keeping the algorithm efficient even for large inputs.
 
 Time and Space Complexity: Traversing half of the matrix gives O(N^2) time complexity, while Union-Find’s space complexity is O(N).
+*/
+int findCircleNum(vector<vector<int>>& isConnected) {
+	int N = isConnected.size();
+	UnionFindArray unionFind(N);
+
+	for (int i = 0; i < N; i++)
+		for (int j = i + 1; j < N; j++)
+			if (isConnected[i][j] == 1)
+				unionFind.unionSets(i, j);
+
+	return unionFind.getSetCount();
+}
+
+
+
+## Number of Islands
+
+https://leetcode.com/problems/number-of-islands/
+
+Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands.
+An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+
+
+
+Recursion: This approach is suitable for smaller grids, as the recursion depth may lead to stack overflow in cases with large input sizes.
+
+Time and Space Complexity : O(M*N) and O(M*N)
 
 ```cpp
-class UnionFindArray {
-private:
-	vector<int> parent;
-	vector<int> size;
-	vector<int> help;
-	int sets;
+void infect(vector<vector<char>>& grid, int i, int j) {
+	int rows = grid.size();
+	int cols = grid[0].size();
 
-public:
-	UnionFindArray(int N) : parent(N), size(N, 1), help(N), sets(N) {
-		for (int i = 0; i < N; i++) {
-			parent[i] = i;
-		}
-	}
+	// Base Case
+	if (i < 0 || i >= rows || j < 0 || j >= cols || grid[i][j] != '1')
+		return;
 
-	int findRoot(int i) {
-		int hi = 0;
-		while (i != parent[i]) {
-			help[hi++] = i;
-			i = parent[i];
-		}
+	grid[i][j] = '0';
 
-		for (hi--; hi >= 0; hi--)
-			parent[help[hi]] = i;
+	// Recursively infect adjacent cells
+	infect(grid, i - 1, j);
+	infect(grid, i + 1, j);
+	infect(grid, i, j - 1);
+	infect(grid, i, j + 1);
+}
 
-		return i;
-	}
+int numIslandsRecursion(vector<vector<char>>& grid) {
+	int rows = grid.size();
+	if (rows == 0) return 0;
+	int cols = grid[0].size();
 
-	void unionSets(int i, int j) {
-		int f1 = findRoot(i);
-		int f2 = findRoot(j);
-		if (f1 != f2) {
-			if (size[f1] >= size[f2]) {
-				size[f1] += size[f2];
-				parent[f2] = f1;
+	int islands = 0;
+	for (int i = 0; i < rows; i++)
+		for (int j = 0; j < cols; j++)
+			if (grid[i][j] == '1') {
+				islands++;
+				infect(grid, i, j);
 			}
-			else {
-				size[f2] += size[f1];
-				parent[f1] = f2;
+
+	return islands;
+}
+
+int numIslands(vector<vector<char>>& grid) {
+	int rows = grid.size();
+	if (rows == 0) return 0;
+	int cols = grid[0].size();
+
+	UnionFindArray unionFind(rows, cols);
+	for (int r = 0; r < rows; r++)
+		for (int c = 0; c < cols; c++)
+			if (grid[r][c] == '1') {
+				int index = unionFind.getIndex(r, c);
+				unionFind.parent[index] = index;
+				unionFind.numSets++;
 			}
-			sets--;
+
+	for (int j = 1; j < cols; j++) {
+		if (grid[0][j - 1] == '1' && grid[0][j] == '1') {
+			unionFind.unionSets(0, j - 1, 0, j);
 		}
 	}
 
-	int getSetCount() const {
-		return sets;
+	for (int i = 1; i < rows; i++) {
+		if (grid[i - 1][0] == '1' && grid[i][0] == '1') {
+			unionFind.unionSets(i - 1, 0, i, 0);
+		}
 	}
-};
 
-class FindCircleNum {
-public:
-	int findCircleNum(vector<vector<int>>& isConnected) {
-		int N = isConnected.size();
-		UnionFindArray unionFind(N);
+	for (int i = 1; i < rows; i++)
+		for (int j = 1; j < cols; j++)
+			if (grid[i][j] == '1') {
+				if (grid[i - 1][j] == '1') {
+					unionFind.unionSets(i - 1, j, i, j);
+				}
+				if (grid[i][j - 1] == '1') {
+					unionFind.unionSets(i, j - 1, i, j);
+				}
+			}
 
-		for (int i = 0; i < N; i++)
-			for (int j = i + 1; j < N; j++)
-				if (isConnected[i][j] == 1)
-					unionFind.unionSets(i, j);
+	return unionFind.getSetCount();
+}
+```
 
-		return unionFind.getSetCount();
+## Number of Islands II
+A 2D grid map of m rows and n columns is initially filled with water. We may perform an addLand operation which turns the water at position (row, col) into a land. Given a list of positions to operate, count the number of islands after each addLand operation. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+
+The main difference between numIslands2 and numIslands1 lies in the dynamic nature of the problem. In numIslands1, the islands are counted in a static grid where all land cells are predefined. In contrast, numIslands2 involves a dynamic grid where water cells are incrementally turned into land, requiring island count updates after each operation.
+
+In this connect implementation, a cell (r, c) is first converted to a 1D index. If the cell is water (indicated by size[index] == 0), it’s marked as land by setting its parent to itself, initializing its size to 1, and incrementing the island count (numSets++). Then, it attempts to merge with any adjacent land cells by calling unionSets on its four neighbors. Finally, it returns the updated number of islands (numSets).
+
+Time and Space Complexity : O(k×α(N)) and O(M*N)
+
+```cpp
+vector<int> numIslands2(int m, int n, vector<vector<int>>& positions) {
+	UnionFindArray unionFind(m, n);
+	unionFind.setDynamicArray();
+	vector<int> result;
+	for (const auto& position : positions) {
+		int numSets = unionFind.connect(position[0], position[1]);
+		result.push_back(numSets);
 	}
-};
+	return result;
+}
 ```

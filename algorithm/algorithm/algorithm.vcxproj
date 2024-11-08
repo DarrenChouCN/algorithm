@@ -75,6 +75,7 @@
     <ClCompile Include="strings\Manacher.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="basic-data-structure\UnionFind.h" />
     <ClInclude Include="common.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
