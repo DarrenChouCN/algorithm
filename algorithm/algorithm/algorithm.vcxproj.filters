@@ -177,12 +177,18 @@
     <ClCompile Include="basic-data-structure\UnionFind.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="basic-data-structure\AVLTreeMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="basic-data-structure\UnionFind.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="basic-data-structure\AVLTreeMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

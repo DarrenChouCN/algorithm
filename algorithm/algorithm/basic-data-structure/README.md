@@ -602,8 +602,7 @@ public:
 };
 ```
 
-/*
-Number of Provinces
+## Number of Provinces
 
 https://leetcode.com/problems/friend-circles/
 
