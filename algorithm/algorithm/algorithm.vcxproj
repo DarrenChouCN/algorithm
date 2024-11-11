@@ -51,6 +51,7 @@
     <ClCompile Include="backtracking\N-Queens.cpp" />
     <ClCompile Include="basic-data-structure\AVLTreeMap.cpp" />
     <ClCompile Include="basic-data-structure\Graph.cpp" />
+    <ClCompile Include="basic-data-structure\SizeBalancedTree.cpp" />
     <ClCompile Include="basic-data-structure\Tree.cpp" />
     <ClCompile Include="basic-data-structure\Trie.cpp" />
     <ClCompile Include="basic-data-structure\UnionFind.cpp" />
@@ -76,8 +77,7 @@
     <ClCompile Include="strings\Manacher.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="basic-data-structure\AVLTreeMap.h" />
-    <ClInclude Include="basic-data-structure\UnionFind.h" />
+    <ClInclude Include="basic-data-structure\BasicDataStructure.h" />
     <ClInclude Include="common.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

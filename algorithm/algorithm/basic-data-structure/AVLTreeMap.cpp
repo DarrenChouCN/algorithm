@@ -1,9 +1,9 @@
-#include "AVLTreeMap.h"
+#include "BasicDataStructure.h"
 
 using namespace std;
 
 template<typename K, typename V>
-AVLNode<K, V>::AVLNode(K, V) :
+AVLNode<K, V>::AVLNode(K k, V v) :
 	key(k), value(v), left(nullptr), right(nullptr), height(1) {}
 
 template <typename K, typename V>
