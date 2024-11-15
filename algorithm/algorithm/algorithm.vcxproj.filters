@@ -183,12 +183,18 @@
     <ClCompile Include="basic-data-structure\SizeBalancedTree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="basic-data-structure\BasicDataStructure.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="basic-data-structure\BasicDataStructure.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="basic-data-structure\SkipListMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

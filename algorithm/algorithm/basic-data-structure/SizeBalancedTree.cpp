@@ -350,57 +350,57 @@ void printAll(SBTNode<string, int>* head) {
 	cout << endl;
 }
 
-struct Apple {
-	int size;
-	Apple() : size(0) {}
-	Apple(int s) : size(s) {}
-};
-
-struct AppleComparator {
-	bool operator()(const Apple& a, const Apple& b) const {
-		return a.size < b.size;  // Comparison based on the `size` member of `Apple`
-	}
-};
-
-int mainSizeBalancedTree() {
-	SizeBalancedTreeMap<Apple, int, AppleComparator> sbt;
-
-	// Insert Apple objects with various sizes
-	sbt.put(Apple(10), 1);
-	sbt.put(Apple(20), 2);
-	sbt.put(Apple(5), 3);
-	sbt.put(Apple(15), 4);
-	sbt.put(Apple(25), 5);
-	sbt.put(Apple(3), 6);
-	sbt.put(Apple(8), 7);
-	sbt.put(Apple(30), 8);
-
-	// Test retrieval with get
-	cout << "Value for Apple(10): " << sbt.get(Apple(10)) << endl;
-	cout << "Value for Apple(20): " << sbt.get(Apple(20)) << endl;
-	cout << "Value for Apple(5): " << sbt.get(Apple(5)) << endl;
-
-	// Test firstKey and lastKey
-	cout << "First Key: Apple(" << sbt.firstKey().size << ")" << endl;
-	cout << "Last Key: Apple(" << sbt.lastKey().size << ")" << endl;
-
-	// Test floorKey and ceilingKey
-	cout << "Floor Key of Apple(18): Apple(" << sbt.floorKey(Apple(18)).size << ")" << endl;
-	cout << "Ceiling Key of Apple(18): Apple(" << sbt.ceilingKey(Apple(18)).size << ")" << endl;
-
-	cout << "Floor Key of Apple(9): Apple(" << sbt.floorKey(Apple(9)).size << ")" << endl;
-	cout << "Ceiling Key of Apple(9): Apple(" << sbt.ceilingKey(Apple(9)).size << ")" << endl;
-
-	// Test remove
-	sbt.remove(Apple(10));
-	cout << "After removing Apple(10), Value for Apple(10): " << sbt.get(Apple(10)) << endl;
-	sbt.remove(Apple(20));
-	cout << "After removing Apple(20), Value for Apple(20): " << sbt.get(Apple(20)) << endl;
-
-	// Test firstKey and lastKey after removals
-	cout << "First Key after removals: Apple(" << sbt.firstKey().size << ")" << endl;
-	cout << "Last Key after removals: Apple(" << sbt.lastKey().size << ")" << endl;
-
-	return 0;
-}
+//struct Apple {
+//	int size;
+//	Apple() : size(0) {}
+//	Apple(int s) : size(s) {}
+//};
+//
+//struct AppleComparator {
+//	bool operator()(const Apple& a, const Apple& b) const {
+//		return a.size < b.size;  // Comparison based on the `size` member of `Apple`
+//	}
+//};
+//
+//int mainSizeBalancedTree() {
+//	SizeBalancedTreeMap<Apple, int, AppleComparator> sbt;
+//
+//	// Insert Apple objects with various sizes
+//	sbt.put(Apple(10), 1);
+//	sbt.put(Apple(20), 2);
+//	sbt.put(Apple(5), 3);
+//	sbt.put(Apple(15), 4);
+//	sbt.put(Apple(25), 5);
+//	sbt.put(Apple(3), 6);
+//	sbt.put(Apple(8), 7);
+//	sbt.put(Apple(30), 8);
+//
+//	// Test retrieval with get
+//	cout << "Value for Apple(10): " << sbt.get(Apple(10)) << endl;
+//	cout << "Value for Apple(20): " << sbt.get(Apple(20)) << endl;
+//	cout << "Value for Apple(5): " << sbt.get(Apple(5)) << endl;
+//
+//	// Test firstKey and lastKey
+//	cout << "First Key: Apple(" << sbt.firstKey().size << ")" << endl;
+//	cout << "Last Key: Apple(" << sbt.lastKey().size << ")" << endl;
+//
+//	// Test floorKey and ceilingKey
+//	cout << "Floor Key of Apple(18): Apple(" << sbt.floorKey(Apple(18)).size << ")" << endl;
+//	cout << "Ceiling Key of Apple(18): Apple(" << sbt.ceilingKey(Apple(18)).size << ")" << endl;
+//
+//	cout << "Floor Key of Apple(9): Apple(" << sbt.floorKey(Apple(9)).size << ")" << endl;
+//	cout << "Ceiling Key of Apple(9): Apple(" << sbt.ceilingKey(Apple(9)).size << ")" << endl;
+//
+//	// Test remove
+//	sbt.remove(Apple(10));
+//	cout << "After removing Apple(10), Value for Apple(10): " << sbt.get(Apple(10)) << endl;
+//	sbt.remove(Apple(20));
+//	cout << "After removing Apple(20), Value for Apple(20): " << sbt.get(Apple(20)) << endl;
+//
+//	// Test firstKey and lastKey after removals
+//	cout << "First Key after removals: Apple(" << sbt.firstKey().size << ")" << endl;
+//	cout << "Last Key after removals: Apple(" << sbt.lastKey().size << ")" << endl;
+//
+//	return 0;
+//}
 

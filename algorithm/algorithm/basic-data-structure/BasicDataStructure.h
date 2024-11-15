@@ -4,6 +4,9 @@
 #include <vector>
 #include <algorithm>
 #include <stack>
+#include <memory>
+#include <functional>
+#include <optional>
 #include <unordered_map>
 
 using namespace std;
@@ -258,7 +261,7 @@ public:
 template <typename K, typename V, typename Comparator = less<K>>
 class SizeBalancedTreeMap {
 private:
-	
+
 	Comparator comp;
 
 	SBTNode<K, V, Comparator>* rightRotate(SBTNode<K, V, Comparator>* cur);

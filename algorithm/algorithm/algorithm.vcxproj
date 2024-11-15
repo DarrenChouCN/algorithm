@@ -50,6 +50,7 @@
     <ClCompile Include="arrays\ValidSudoku.cpp" />
     <ClCompile Include="backtracking\N-Queens.cpp" />
     <ClCompile Include="basic-data-structure\AVLTreeMap.cpp" />
+    <ClCompile Include="basic-data-structure\BasicDataStructure.cpp" />
     <ClCompile Include="basic-data-structure\Graph.cpp" />
     <ClCompile Include="basic-data-structure\SizeBalancedTree.cpp" />
     <ClCompile Include="basic-data-structure\Tree.cpp" />
@@ -78,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="basic-data-structure\BasicDataStructure.h" />
+    <ClInclude Include="basic-data-structure\SkipListMap.h" />
     <ClInclude Include="common.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -166,6 +168,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
