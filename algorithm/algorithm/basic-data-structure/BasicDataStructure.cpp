@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include "SkipListMap.h"
+#include "AVLTreeMap.h"
+#include "SizeBalancedTreeMap.h"
 
 using namespace std;
 
@@ -32,7 +34,7 @@ void SkipListMapPrintAll(const SkipListMap<Apple, string, AppleComparator>& obj)
     cout << endl;
 }
 
-int main() {
+int testSkipListMap() {
     SkipListMap<Apple, string, AppleComparator> test;
 
     // Insert a range of values into the skip list
@@ -71,5 +73,101 @@ int main() {
     cout << "First key after removals: " << test.firstKey()->size << " // Expected: 2" << endl;
     cout << "Last key after removals: " << test.lastKey()->size << " // Expected: 19" << endl;
 
+    return 0;
+}
+
+void testAVLTreeMap() {
+    AVLTreeMap<Apple, string, AppleComparator> tree;
+
+    vector<pair<Apple, string>> apples = {
+        {Apple(10), "Small Apple"},
+        {Apple(20), "Medium Apple"},
+        {Apple(30), "Large Apple"},
+        {Apple(25), "Almost Large Apple"},
+        {Apple(5), "Very Small Apple"},
+        {Apple(15), "Between Small and Medium"},
+        {Apple(35), "Extra Large Apple"}
+    };
+
+    for (const auto& [apple, description] : apples) {
+        tree.put(apple, description);
+    }
+
+    cout << "Test get():" << endl;
+    cout << "Apple(10): " << (tree.get(Apple(10)).has_value() ? *tree.get(Apple(10)) : "Not found") << endl;
+    cout << "Apple(20): " << (tree.get(Apple(20)).has_value() ? *tree.get(Apple(20)) : "Not found") << endl;
+    cout << "Apple(30): " << (tree.get(Apple(30)).has_value() ? *tree.get(Apple(30)) : "Not found") << endl;
+
+    cout << "\nTest containsKey():" << endl;
+    cout << "Contains Apple(25): " << (tree.containsKey(Apple(25)) ? "Yes" : "No") << endl;
+    cout << "Contains Apple(100): " << (tree.containsKey(Apple(100)) ? "Yes" : "No") << endl;
+
+    cout << "\nTest firstKey() and lastKey():" << endl;
+    cout << "First Key: " << (tree.firstKey().has_value() ? to_string(tree.firstKey()->size) : "None") << endl;
+    cout << "Last Key: " << (tree.lastKey().has_value() ? to_string(tree.lastKey()->size) : "None") << endl;
+
+    cout << "\nTest floorKey() and ceilingKey():" << endl;
+    cout << "Floor Key of 23: " << (tree.floorKey(Apple(23)).has_value() ? to_string(tree.floorKey(Apple(23))->size) : "None") << endl;
+    cout << "Ceiling Key of 23: " << (tree.ceilingKey(Apple(23)).has_value() ? to_string(tree.ceilingKey(Apple(23))->size) : "None") << endl;
+    cout << "Floor Key of 5: " << (tree.floorKey(Apple(5)).has_value() ? to_string(tree.floorKey(Apple(5))->size) : "None") << endl;
+    cout << "Ceiling Key of 35: " << (tree.ceilingKey(Apple(35)).has_value() ? to_string(tree.ceilingKey(Apple(35))->size) : "None") << endl;
+
+    cout << "\nTest remove():" << endl;
+    tree.remove(Apple(20));
+    cout << "After removing Apple(20), contains Apple(20): " << (tree.containsKey(Apple(20)) ? "Yes" : "No") << endl;
+    cout << "After removing Apple(20), floorKey(23): " << (tree.floorKey(Apple(23)).has_value() ? to_string(tree.floorKey(Apple(23))->size) : "None") << endl;
+}
+
+void testSizeBalancedTreeMap() {
+    SizeBalancedTreeMap<Apple, string, AppleComparator> sbt;
+
+    vector<pair<Apple, string>> apples = {
+        {Apple(10), "Small Apple"},
+        {Apple(20), "Medium Apple"},
+        {Apple(30), "Large Apple"},
+        {Apple(25), "Almost Large Apple"},
+        {Apple(5), "Very Small Apple"},
+        {Apple(15), "Between Small and Medium"},
+        {Apple(35), "Extra Large Apple"}
+    };
+
+    for (const auto& [apple, description] : apples) {
+        sbt.put(apple, description);
+    }
+
+    cout << "Test get():" << endl;
+    cout << "Apple(10): " << (sbt.get(Apple(10)).has_value() ? *sbt.get(Apple(10)) : "Not found") << endl;
+    cout << "Apple(20): " << (sbt.get(Apple(20)).has_value() ? *sbt.get(Apple(20)) : "Not found") << endl;
+    cout << "Apple(30): " << (sbt.get(Apple(30)).has_value() ? *sbt.get(Apple(30)) : "Not found") << endl;
+
+    cout << "\nTest containsKey():" << endl;
+    cout << "Contains Apple(25): " << (sbt.containsKey(Apple(25)) ? "Yes" : "No") << endl;
+    cout << "Contains Apple(100): " << (sbt.containsKey(Apple(100)) ? "Yes" : "No") << endl;
+
+    cout << "\nTest size():" << endl;
+    cout << "Tree size: " << sbt.size() << endl;
+
+    cout << "\nTest floorKey() and ceilingKey():" << endl;
+    /*cout << "Floor Key of 23: " << (sbt.get(Apple(23)).has_value() ?
+        to_string(sbt.get(Apple(23))->size) : "None") << endl;
+    cout << "Ceiling Key of 23: " << (sbt.get(Apple(23)).has_value() ? 
+        to_string(sbt.get(Apple(23))->size) : "None") << endl;*/
+
+    cout << "\nTest remove():" << endl;
+    sbt.remove(Apple(20));
+    cout << "After removing Apple(20), contains Apple(20): " << (sbt.containsKey(Apple(20)) ? "Yes" : "No") << endl;
+    cout << "After removing Apple(20), size: " << sbt.size() << endl;
+
+    cout << "\nFinal tree contents:" << endl;
+    for (const auto& [apple, description] : apples) {
+        if (sbt.containsKey(apple)) {
+            cout << "Apple(" << apple.size << "): " << *sbt.get(apple) << endl;
+        }
+    }
+}
+
+
+int main1() {
+    testSizeBalancedTreeMap();
     return 0;
 }

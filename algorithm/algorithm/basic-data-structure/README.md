@@ -740,3 +740,478 @@ vector<int> numIslands2(int m, int n, vector<vector<int>>& positions) {
 	return result;
 }
 ```
+
+
+
+## AVL Tree
+An AVL tree maintains a balance factor (-1,0,1) for every node, ensuring the height difference between the left and right subtrees is at most 1. It follows the BST property where the left subtree contains smaller keys, and the right subtree contains larger keys. The tree performs single or double rotations (left or right) to maintain balance after insertion or deletion.
+
+Common Use Cases:
+1. Useful in scenarios requiring fast ordered insertions, deletions, and lookups, such as implementing maps or sets.
+2. Often used in databases for maintaining sorted indexes.
+3. Helps in managing ranges or time-based data efficiently.
+
+Complexity:
+Time Complexity: Search, Insert, Delete: O(logN) (height is logarithmic due to balancing).
+Space Complexity: O(N) for storing nodes.
+
+Construction:
+Start with an empty tree. Insert nodes one by one following the BST rule. After each insertion, calculate the balance factor and perform necessary rotations to maintain balance.
+
+Additional Notes:
+1. Comparison with Red-Black Trees: AVL trees provide stricter balancing than Red-Black trees, leading to faster lookups but slower insertions and deletions.
+2. Custom Comparators: Comparators can be used to define custom orderings, making it flexible for various data types.
+
+```cpp
+#ifndef AVL_TREE_MAP_H
+#define AVL_TREE_MAP_H
+
+#include <memory>
+#include <optional>
+#include <functional>
+#include <algorithm>
+
+using namespace std;
+
+template <typename K, typename V, typename Comparator = less<K>>
+class AVLTreeMap {
+private:
+    struct AVLNode {
+        K key;
+        V value;
+        unique_ptr<AVLNode> left;
+        unique_ptr<AVLNode> right;
+        int height;
+
+        AVLNode(K k, V v) : key(k), value(v), left(nullptr), right(nullptr), height(1) {}
+    };
+
+    unique_ptr<AVLNode> root;
+    int size;
+    Comparator comp;
+
+    int getHeight(const unique_ptr<AVLNode>& node) const {
+        return node ? node->height : 0;
+    }
+
+    int getBalance(const unique_ptr<AVLNode>& node) const {
+        return node ? getHeight(node->left) - getHeight(node->right) : 0;
+    }
+
+    /*
+        cur					 left
+       /					/    \
+     left		->      left.r   cur
+       \
+        left.r
+    */
+    unique_ptr<AVLNode> rightRotate(unique_ptr<AVLNode> cur) {
+        auto leftChild = move(cur->left);
+        cur->left = move(leftChild->right);
+        leftChild->right = move(cur);
+
+        updateHeight(leftChild->right);
+        updateHeight(leftChild);
+        return leftChild;
+    }
+
+    /*
+        cur                 right
+          \               /      \
+         right    ->    cur      right.r
+        /				   \
+      right.l			   right.l
+    */
+    unique_ptr<AVLNode> leftRotate(unique_ptr<AVLNode> cur) {
+        auto rightChild = move(cur->right);
+        cur->right = move(rightChild->left);
+        rightChild->left = move(cur);
+
+        updateHeight(rightChild->left);
+        updateHeight(rightChild);
+        return rightChild;
+    }
+
+    void updateHeight(unique_ptr<AVLNode>& node) {
+        node->height = 1 + max(getHeight(node->left), getHeight(node->right));
+    }
+
+    /*
+    1. Calculate the heights of the left and right children. If the height difference (leftHeight - rightHeight) exceeds 1, the node is unbalanced.
+    2. Left-Heavy Cases:
+        LL Case: If the left subtree’s left child height (leftLeftHeight) is greater than or equal to the right child height (leftRightHeight), perform a right rotation on cur.
+        LR Case: If the left subtree’s right child is taller, perform a left rotation on cur->left, then a right rotation on cur.
+    3. Right-Heavy Cases:
+        RR Case: If the right subtree’s right child height (rightRightHeight) is greater than or equal to the left child height (rightLeftHeight), perform a left rotation on cur.
+        RL Case: If the right subtree’s left child is taller, perform a right rotation on cur->right, then a left rotation on cur.
+    4. Update cur’s height based on the maximum height of its left and right children after balancing.
+    */
+    unique_ptr<AVLNode> maintain(unique_ptr<AVLNode> node) {
+        if (!node) return nullptr;
+
+        updateHeight(node);
+        int balance = getBalance(node);
+
+        if (balance > 1) {
+            if (getBalance(node->left) < 0)
+                // LR case: first perform a left rotation on cur->left, then a right rotation on cur
+                node->left = leftRotate(move(node->left));
+            // LL case: perform a right rotation on cur
+            node = rightRotate(move(node));
+        }
+        else if (balance < -1) {
+            if (getBalance(node->right) > 0)
+                // RL case: first perform a right rotation on cur->right, then a left rotation on cur
+                node->right = rightRotate(move(node->right));
+            // RR case: perform a left rotation on cur
+            node = leftRotate(move(node));
+        }
+
+        return node;
+    }
+
+    unique_ptr<AVLNode> add(unique_ptr<AVLNode> node, const K& key, const V& value) {
+        if (!node) return make_unique<AVLNode>(key, value);
+
+        if (comp(key, node->key))
+            node->left = add(move(node->left), key, value);
+        else if (comp(node->key, key))
+            node->right = add(move(node->right), key, value);
+        else
+            node->value = value;
+
+        return maintain(move(node));
+    }
+
+    unique_ptr<AVLNode> deleteNode(unique_ptr<AVLNode> node, const K& key) {
+        if (!node) return nullptr;
+
+        if (comp(key, node->key)) {
+            node->left = deleteNode(move(node->left), key);
+        }
+        else if (comp(node->key, key)) {
+            node->right = deleteNode(move(node->right), key);
+        }
+        else {
+            if (!node->left) return move(node->right);
+            if (!node->right) return move(node->left);
+
+            auto successor = getMinNode(node->right);
+            node->key = successor->key;
+            node->value = successor->value;
+            node->right = deleteMin(move(node->right));
+        }
+
+        return maintain(move(node));
+    }
+
+    AVLNode* getMinNode(const unique_ptr<AVLNode>& node) const {
+        AVLNode* cur = node.get();
+        while (cur && cur->left) cur = cur->left.get();
+        return cur;
+    }
+
+    unique_ptr<AVLNode> deleteMin(unique_ptr<AVLNode> node) {
+        if (!node->left) return move(node->right);
+        node->left = deleteMin(move(node->left));
+        return maintain(move(node));
+    }
+
+    AVLNode* findLastNoSmallIndex(const K& key) const {
+        AVLNode* ans = nullptr;
+        AVLNode* cur = root.get();
+        while (cur) {
+            if (!comp(cur->key, key) && !comp(key, cur->key)) {
+                ans = cur;
+                break;
+            }
+            else if (comp(key, cur->key)) {
+                cur = cur->left.get();
+            }
+            else {
+                ans = cur;
+                cur = cur->right.get();
+            }
+        }
+        return ans;
+    }
+
+    AVLNode* findLastNoBigIndex(const K& key) const {
+        AVLNode* ans = nullptr;
+        AVLNode* cur = root.get();
+        while (cur) {
+            if (!comp(cur->key, key) && !comp(key, cur->key)) {
+                ans = cur;
+                break;
+            }
+            else if (comp(key, cur->key)) {
+                cur = cur->left.get();
+            }
+            else {
+                ans = cur;
+                cur = cur->right.get();
+            }
+        }
+        return ans;
+    }
+
+public:
+    AVLTreeMap(Comparator c = Comparator()) : root(nullptr), size(0), comp(c) {}
+
+    int getSize() const {
+        return size;
+    }
+
+    bool containsKey(const K& key) const {
+        auto lastNode = findLastNoBigIndex(key);
+        return lastNode && !comp(lastNode->key, key) && !comp(key, lastNode->key);
+    }
+
+    void put(const K& key, const V& value) {
+        if (!containsKey(key)) size++;
+        root = add(move(root), key, value);
+    }
+
+    void remove(const K& key) {
+        if (containsKey(key)) {
+            size--;
+            root = deleteNode(move(root), key);
+        }
+    }
+
+    optional<V> get(const K& key) const {
+        auto lastNode = findLastNoBigIndex(key);
+        return (lastNode && !comp(lastNode->key, key) && !comp(key, lastNode->key))
+            ? optional<V>{lastNode->value} : nullopt;
+    }
+
+    optional<K> firstKey() const {
+        auto cur = root.get();
+        while (cur && cur->left) cur = cur->left.get();
+        return cur ? optional<K>{cur->key} : nullopt;
+    }
+
+    optional<K> lastKey() const {
+        auto cur = root.get();
+        while (cur && cur->right) cur = cur->right.get();
+        return cur ? optional<K>{cur->key} : nullopt;
+    }
+
+    optional<K> floorKey(const K& key) const {
+        auto node = findLastNoBigIndex(key);
+        return node ? optional<K>{node->key} : nullopt;
+    }
+
+    optional<K> ceilingKey(const K& key) const {
+        auto node = findLastNoSmallIndex(key);
+        return node ? optional<K>{node->key} : nullopt;
+    }
+};
+
+#endif // AVL_TREE_MAP_H
+```
+
+
+## Size Balanced Tree
+Difference between Size Balanced Tree and AVL Tree:
+A Size Balanced (SB) Tree is a self-balancing binary search tree that maintains balance by ensuring size constraints across its subtrees, rather than strict height constraints like in an AVL tree. While AVL trees focus on keeping the tree height balanced to minimize path length, SB trees balance by comparing subtree sizes and performing rotations only when the size imbalance exceeds a certain threshold. This typically results in fewer rotations and slightly faster insertion/deletion operations in some cases, though SB trees may not achieve as strict height balance as AVL trees.
+
+Time and Space Complexity of SB Tree:
+The time complexity for search, insertion, and deletion operations in an SB Tree is O(logn) on average, similar to other balanced trees like AVL and Red-Black trees. However, due to its size-based balancing, it may experience slightly better performance in practice under certain workloads. The space complexity of an SB Tree is O(n), as it stores one node per element plus a small amount of additional storage for balancing metadata.
+
+```cpp
+#ifndef SIZE_BALANCED_TREE_MAP_H
+#define SIZE_BALANCED_TREE_MAP_H
+
+#include <memory>
+#include <functional>
+#include <stdexcept>
+
+using namespace std;
+
+template <typename K, typename V, typename Comparator = less<K>>
+class SizeBalancedTreeMap {
+private:
+    struct SBTNode {
+        K key;
+        V value;
+        unique_ptr<SBTNode> left;
+        unique_ptr<SBTNode> right;
+        int size;
+
+        SBTNode(const K& k, const V& v) : key(k), value(v), left(nullptr), right(nullptr), size(1) {}
+    };
+
+    unique_ptr<SBTNode> root;
+    Comparator comp;
+
+    int getNodeSize(const unique_ptr<SBTNode>& node) const {
+        return node ? node->size : 0;
+    }
+
+    int getNodeSize(const SBTNode* node) const {
+        return node ? node->size : 0;
+    }
+
+    // Right Rotate
+    unique_ptr<SBTNode> rightRotate(unique_ptr<SBTNode> cur) {
+        auto leftNode = move(cur->left);
+        cur->left = move(leftNode->right);
+        leftNode->right = move(cur);
+
+        leftNode->size = getNodeSize(leftNode->left) + getNodeSize(leftNode->right) + 1;
+        leftNode->right->size = 
+            getNodeSize(leftNode->right->left) + getNodeSize(leftNode->right->right) + 1;
+        return leftNode;
+    }
+
+    // Left Rotate
+    unique_ptr<SBTNode> leftRotate(unique_ptr<SBTNode> cur) {
+        auto rightNode = move(cur->right);
+        cur->right = move(rightNode->left);
+        rightNode->left = move(cur);
+
+        rightNode->size = getNodeSize(rightNode->left) + getNodeSize(rightNode->right) + 1;
+        rightNode->left->size =
+            getNodeSize(rightNode->left->left) + getNodeSize(rightNode->left->right) + 1;
+        return rightNode;
+    }
+
+    // Recursively Maintain
+    unique_ptr<SBTNode> maintain(unique_ptr<SBTNode> cur) {
+        if (!cur) return nullptr;
+
+        int leftSize = getNodeSize(cur->left);
+        int leftLeftSize = getNodeSize(cur->left ? cur->left->left.get() : nullptr);
+        int leftRightSize = getNodeSize(cur->left ? cur->left->right.get() : nullptr);
+
+        int rightSize = getNodeSize(cur->right);
+        int rightLeftSize = getNodeSize(cur->right ? cur->right->left.get() : nullptr);
+        int rightRightSize = getNodeSize(cur->right ? cur->right->right.get() : nullptr);
+
+        // LL case
+        if (leftLeftSize > rightSize) {
+            cur = rightRotate(move(cur));
+            cur->right = maintain(move(cur->right));
+            cur = maintain(move(cur));
+        }
+        //LR case
+        else if (leftRightSize > rightSize) {
+            cur->left = leftRotate(move(cur->left));
+            cur = rightRotate(move(cur));
+            cur->left = maintain(move(cur->left));
+            cur->right = maintain(move(cur->right));
+            cur = maintain(move(cur));
+        }
+        //RR case
+        else if (rightRightSize > leftSize) {
+            cur = leftRotate(move(cur));
+            cur->left = maintain(move(cur->left));
+            cur = maintain(move(cur));
+        }
+        //RL case
+        else if (rightLeftSize > leftSize) {
+            cur->right = rightRotate(move(cur->right));
+            cur = leftRotate(move(cur));
+            cur->left = maintain(move(cur->left));
+            cur->right = maintain(move(cur->right));
+            cur = maintain(move(cur));
+        }
+
+        return cur;
+    }
+
+    unique_ptr<SBTNode> add(unique_ptr<SBTNode> cur, const K& key, const V& value) {
+        if (!cur) return make_unique<SBTNode>(key, value);
+
+        cur->size++;
+        if (comp(key, cur->key))
+            cur->left = add(move(cur->left), key, value);
+        else
+            cur->right = add(move(cur->right), key, value);
+
+        return maintain(move(cur));
+    }
+
+    unique_ptr<SBTNode> remove(unique_ptr<SBTNode> cur, const K& key) {
+        if (!cur) return nullptr;
+
+        cur->size--;
+        if (comp(key, cur->key)) {
+            cur->left = remove(move(cur->left), key);
+        }
+        else if (comp(cur->key, key)) {
+            cur->right = remove(move(cur->right), key);
+        }
+        else {
+            if (!cur->left) return move(cur->right);
+            if (!cur->right) return move(cur->left);
+
+            auto successor = moveMin(move(cur->right));
+            successor->right = move(cur->right);
+            successor->left = move(cur->left);
+            successor->size = getNodeSize(successor->left) + getNodeSize(successor->right) + 1;
+            return maintain(move(successor));
+        }
+
+        return maintain(move(cur));
+    }
+
+    unique_ptr<SBTNode> moveMin(unique_ptr<SBTNode> cur) {
+        if (!cur->left) return move(cur);
+        cur->left = moveMin(move(cur->left));
+        cur->size = getNodeSize(cur->left) + getNodeSize(cur->right) + 1;
+        return maintain(move(cur));
+    }
+
+    SBTNode* findLastNoSmallIndex(const unique_ptr<SBTNode>& cur, const K& key) const {
+        SBTNode* ans = nullptr;
+        auto node = cur.get();
+
+        while (node) {
+            if (!comp(node->key, key) && !comp(key, node->key)) {
+                ans = node;
+                break;
+            }
+            else if (comp(key, node->key)) {
+                node = node->left.get();
+            }
+            else {
+                ans = node;
+                node = node->right.get();
+            }
+        }
+
+        return ans;
+    }
+
+public:
+    SizeBalancedTreeMap(Comparator c = Comparator()) : root(nullptr), comp(c) {}
+
+    int size() const {
+        return getNodeSize(root);
+    }
+
+    bool containsKey(const K& key) const {
+        auto lastNode = findLastNoSmallIndex(root, key);
+        return lastNode && !comp(key, lastNode->key) && !comp(lastNode->key, key);
+    }
+
+    void put(const K& key, const V& value) {
+        root = add(move(root), key, value);
+    }
+
+    void remove(const K& key) {
+        if (containsKey(key))
+            root = remove(move(root), key);
+    }
+
+    optional<V> get(const K& key) const {
+        auto lastNode = findLastNoSmallIndex(root, key);
+        return (lastNode && !comp(key, lastNode->key) && !comp(lastNode->key, key))
+            ? optional<V>{lastNode->value} : nullopt;
+    }
+};
+
+#endif // SIZE_BALANCED_TREE_MAP_H
+```
