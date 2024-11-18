@@ -177,7 +177,10 @@
     <ClCompile Include="basic-data-structure\UnionFind.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="basic-data-structure\BasicDataStructure.cpp">
+    <ClCompile Include="basic-data-structure\BasicDataStructureTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="basic-data-structure\ProblemOfSortedMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

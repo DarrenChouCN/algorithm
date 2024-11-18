@@ -49,8 +49,9 @@
     <ClCompile Include="arrays\Sum2.cpp" />
     <ClCompile Include="arrays\ValidSudoku.cpp" />
     <ClCompile Include="backtracking\N-Queens.cpp" />
-    <ClCompile Include="basic-data-structure\BasicDataStructure.cpp" />
+    <ClCompile Include="basic-data-structure\BasicDataStructureTest.cpp" />
     <ClCompile Include="basic-data-structure\Graph.cpp" />
+    <ClCompile Include="basic-data-structure\ProblemOfSortedMap.cpp" />
     <ClCompile Include="basic-data-structure\Tree.cpp" />
     <ClCompile Include="basic-data-structure\Trie.cpp" />
     <ClCompile Include="basic-data-structure\UnionFind.cpp" />
