@@ -12,6 +12,7 @@ The time complexity for search, insertion, and deletion operations in an SB Tree
 #include <memory>
 #include <functional>
 #include <stdexcept>
+#include <optional>
 
 using namespace std;
 
