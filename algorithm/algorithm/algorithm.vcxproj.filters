@@ -183,6 +183,9 @@
     <ClCompile Include="basic-data-structure\ProblemOfSortedMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="mathematics\InductionMethod.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h">

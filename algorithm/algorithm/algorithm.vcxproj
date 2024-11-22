@@ -65,6 +65,7 @@
     <ClCompile Include="dynamic-programming\StructuredRecursion.cpp" />
     <ClCompile Include="greedy\ClassicalGreedyAlgorithms.cpp" />
     <ClCompile Include="greedy\HeapSort.cpp" />
+    <ClCompile Include="mathematics\InductionMethod.cpp" />
     <ClCompile Include="pointer-manipulation\MorrisTraversal.cpp" />
     <ClCompile Include="randomized\ReservoirSampling.cpp" />
     <ClCompile Include="strings\AhoCorasickAutomation.cpp" />

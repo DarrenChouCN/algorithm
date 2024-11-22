@@ -727,3 +727,20 @@ int partitionBS(const vector<int>& arr) {
 
 	return n % 2 == 0 ? evenResult : max(evenResult, oddResult);
 }
+
+
+/*
+Minimum Cost to Pass All Monsters
+
+You are given two arrays:
+int[] d where d[i] represents the power of the i-th monster.
+int[] p where p[i] represents the cost required by the i-th monster.
+At the beginning, your power is 0, and your goal is to pass through all the monsters starting from the 0-th monster.
+
+Rules:
+If your current power is less than the power of the i-th monster (d[i]), you must pay the cost p[i] to bribe the monster. After bribing, the monster joins you, and your power increases by the power of the i-th monster (d[i]).
+If your current power is greater than or equal to the power of the i-th monster, you can choose to:
+Pass through the monster without paying, and your power remains the same.
+Or, bribe the monster anyway, in which case the monster joins you, and your power increases by the power of the i-th monster (d[i]).
+Objective: Return the minimum cost required to pass through all the monsters.
+*/
