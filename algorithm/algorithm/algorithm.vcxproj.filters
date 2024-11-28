@@ -186,6 +186,9 @@
     <ClCompile Include="mathematics\InductionMethod.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="algorithm-strategy\SizeDrivenMaxSubarraySum.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h">
