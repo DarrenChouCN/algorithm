@@ -1,4 +1,5 @@
 #include <set>
+#include <map>
 #include <iostream>
 #include <vector>
 #include <unordered_set>
@@ -193,4 +194,86 @@ int mainMax() {
 	cout << maxDPWithLargeArr(arr, m) << endl;
 	cout << maxDivedeAndConquer(arr, m) << endl;
 	return 0;
+}
+
+
+/*
+Number of Ways to Pack Snacks
+You are given n bags of snacks, each with a specific volume, and a backpack with a certain capacity. You need to determine how many ways you can choose a subset of these bags such that the total volume of the chosen bags does not exceed the capacity of the backpack.
+Input:
+	An integer n (1 ¡Ü n ¡Ü 30) representing the number of bags.
+	An integer w (1 ¡Ü w ¡Ü 2 * 10^9) representing the capacity of the backpack.
+	A list of n integers v[] (0 ¡Ü v[i] ¡Ü 10^9), where each element represents the volume of the i-th snack bag.
+Output:
+	Return the total number of valid ways to pack the bags such that the total volume of selected bags is less than or equal to w. Note that selecting no bags (total volume = 0) is considered one valid way.
+*/
+
+// Helper function to compute the number of ways recursively
+long long process(const vector<int>& arr, int index, long long w, int end, int bag, map<long long, long long>& weightMap) {
+	if (w > bag) {
+		return 0;
+	}
+	if (index > end) {
+		if (w != 0) {
+			if (weightMap.find(w) == weightMap.end()) {
+				weightMap[w] = 1;
+			}
+			else {
+				weightMap[w] += 1;
+			}
+			return 1;
+		}
+		else {
+			return 0;
+		}
+	}
+	else {
+		long long ways = process(arr, index + 1, w, end, bag, weightMap);
+		ways += process(arr, index + 1, w + arr[index], end, bag, weightMap);
+		return ways;
+	}
+}
+
+// Main function to calculate the number of ways to pack snacks
+long long ways(const vector<int>& arr, int bag) {
+	if (arr.empty()) {
+		return 0;
+	}
+	if (arr.size() == 1) {
+		return arr[0] <= bag ? 2 : 1;
+	}
+
+	int mid = (arr.size() - 1) >> 1;
+
+	// Left half weight combinations
+	map<long long, long long> leftWeightMap;
+	long long totalWays = process(arr, 0, 0, mid, bag, leftWeightMap);
+
+	// Right half weight combinations
+	map<long long, long long> rightWeightMap;
+	totalWays += process(arr, mid + 1, 0, arr.size() - 1, bag, rightWeightMap);
+
+	// Prefix sum for right weight combinations
+	map<long long, long long> rightPrefixMap;
+	long long prefixCount = 0;
+	for (const auto& entry : rightWeightMap) {
+		prefixCount += entry.second;
+		rightPrefixMap[entry.first] = prefixCount;
+	}
+
+	// Combine left and right combinations
+	for (const auto& entry : leftWeightMap) {
+		long long leftWeight = entry.first;
+		long long leftWays = entry.second;
+
+		// Find the largest valid right weight that fits within the bag capacity
+		auto maxValidRightWeight = rightPrefixMap.lower_bound(bag - leftWeight);
+
+		if (maxValidRightWeight != rightPrefixMap.end()) {
+			long long rightWays = maxValidRightWeight->second;
+			totalWays += leftWays * rightWays;
+		}
+	}
+
+	return totalWays + 1;  // Include the case where no snacks are chosen
 }
