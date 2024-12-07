@@ -15,91 +15,85 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="arrays\Sum2.cpp">
+    <ClCompile Include="leetcode-problem\SumProblem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\MergeSortedArray.cpp">
+    <ClCompile Include="leetcode-problem\MergeSortedArray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\PlusOne.cpp">
+    <ClCompile Include="leetcode-problem\PlusOne.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\MissingRanges.cpp">
+    <ClCompile Include="leetcode-problem\MissingRanges.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\SummaryRanges.cpp">
+    <ClCompile Include="leetcode-problem\SummaryRanges.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\FindAllNumbersDisappeared.cpp">
+    <ClCompile Include="leetcode-problem\FindAllNumbersDisappeared.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\MaxConsecutiveOnes.cpp">
+    <ClCompile Include="leetcode-problem\MaxConsecutiveOnes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\SlidingWindow.cpp">
+    <ClCompile Include="leetcode-problem\ElementAppearingCount.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\ElementAppearingCount.cpp">
+    <ClCompile Include="leetcode-problem\SmallestEqualIndex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\SmallestEqualIndex.cpp">
+    <ClCompile Include="leetcode-problem\CumulativeProblem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\Sum3And4.cpp">
+    <ClCompile Include="leetcode-problem\NewPermutation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\CumulativeProblem.cpp">
+    <ClCompile Include="leetcode-problem\MaxContainer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\NewPermutation.cpp">
+    <ClCompile Include="leetcode-problem\BinarySearch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\MaxContainer.cpp">
+    <ClCompile Include="leetcode-problem\MergeAndInsertIntervals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\BinarySearch.cpp">
+    <ClCompile Include="leetcode-problem\ValidSudoku.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\MergeAndInsertIntervals.cpp">
+    <ClCompile Include="leetcode-problem\ArrayRotate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\ValidSudoku.cpp">
+    <ClCompile Include="leetcode-problem\KthLargestElement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\ArrayRotate.cpp">
+    <ClCompile Include="leetcode-problem\NonDecreasingArray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\KthLargestElement.cpp">
+    <ClCompile Include="leetcode-problem\CountPrime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\NonDecreasingArray.cpp">
+    <ClCompile Include="leetcode-problem\MajorityElement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\CountPrime.cpp">
+    <ClCompile Include="bitwise-operations\BitManipulation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\MajorityElement.cpp">
+    <ClCompile Include="leetcode-problem\FindDuplicateNumber.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\BitManipulation.cpp">
+    <ClCompile Include="leetcode-problem\GameOfLife.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\FindDuplicateNumber.cpp">
+    <ClCompile Include="leetcode-problem\ProductOfRunLengthArrays.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\GameOfLife.cpp">
+    <ClCompile Include="leetcode-problem\SortedTransformedArray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\ProductOfRunLengthArrays.cpp">
+    <ClCompile Include="mathematics\MathematicalRelated.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arrays\SortedTransformedArray.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="arrays\MathematicalRelated.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="arrays\BasicSorts.cpp">
+    <ClCompile Include="basic-data-structure\BasicSorts.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="divide-and-conquer\MergeSort.cpp">
