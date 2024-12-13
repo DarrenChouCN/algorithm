@@ -220,7 +220,7 @@ struct Node {
 };
 
 // Main function to calculate medians of all sliding windows
-vector<double> medianSlidingWindow(vector<int>& nums, int k) {
+vector<double> medianSlidingWindowUsingTree(vector<int>& nums, int k) {
 	multiset<Node> window;  // Multiset to maintain the sorted sliding window
 	vector<double> result; 
 
@@ -248,10 +248,10 @@ vector<double> medianSlidingWindow(vector<int>& nums, int k) {
 	return result;
 }
 
-int mainMedianSlidingWindow() {
+int mainMedianSlidingWindowUsingTree() {
 	vector<int> nums = { 1, 3, -1, -3, 5, 3, 6, 7 };
 	int k = 3;
-	vector<double> result = medianSlidingWindow(nums, k);
+	vector<double> result = medianSlidingWindowUsingTree(nums, k);
 
 	for (double median : result) {
 		cout << median << " ";

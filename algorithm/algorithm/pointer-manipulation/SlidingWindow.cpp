@@ -385,3 +385,71 @@ int mainNumSubarrayProductLessThanK() {
 
 	return 0;
 }
+
+
+/*
+Find the Length of the Longest Subarray with Sum Equal to K
+Given an array of positive integers arr and a positive integer K, find the length of the longest subarray within arr whose elements sum up to exactly K. If no such subarray exists, return 0.
+
+Set up left and right pointers to form a sliding window. If the cumulative sum within the window equals k, record the length and move the right window boundary of the window to the right; if the sum inside the window is greater than k, move the left boundary of the window to the right; if the sum inside the window is less than k, move the left boundary of the window to the right.
+
+Time and Space Complexity: O(n) and O(1)
+*/
+int findMaxLength(vector<int> arr, int k) {
+	if (arr.empty() || k <= 0)
+		return 0;
+
+	int left = 0;
+	int right = 0;
+	int sum = arr[0];
+	int len = 0;
+
+	while (right < arr.size()) {
+		if (sum == k) {
+			len = max(len, right - left + 1);
+			sum -= arr[left++];
+		}
+		else if (sum < k) {
+			right++;
+			if (right == arr.size())
+				break;
+			sum += arr[right];
+		}
+		else {
+			sum -= arr[left++];
+		}
+	}
+	return len;
+}
+
+int main() {
+	// Test cases
+	vector<pair<vector<int>, int>> testCases = {
+		{{1, 2, 3, 4, 5}, 9},         // Expected output: 3 (subarray: {2, 3, 4})
+		{{1, 1, 1, 1, 1}, 2},         // Expected output: 2 (subarray: {1, 1})
+		{{5, 1, 2, 3, 5}, 10},        // Expected output: 3 (subarray: {2, 3, 5})
+		{{3, 1, 4, 1, 5}, 15},        // Expected output: 0 (no subarray with sum 15)
+		{{10, 5, 2, 7, 1, 9}, 15},    // Expected output: 4 (subarray: {5, 2, 7, 1})
+		{{1, 2, 3}, 6},               // Expected output: 3 (subarray: {1, 2, 3})
+		{{1, 2, 3}, 7}                // Expected output: 0 (no subarray with sum 7)
+	};
+
+	// Execute and print results
+	for (int i = 0; i < testCases.size(); i++) {
+		const auto& [arr, k] = testCases[i];
+		cout << "Test case " << i + 1 << ": ";
+		cout << "Input: [";
+		for (size_t j = 0; j < arr.size(); j++) {
+			cout << arr[j] << (j < arr.size() - 1 ? ", " : "");
+		}
+		cout << "], K = " << k << endl;
+		cout << "Output: " << findMaxLength(arr, k) << endl;
+		cout << "-----------------------------" << endl;
+	}
+
+	return 0;
+}
+
+/*
+You are given an array of positive integers arr and a positive integer K. Your task is to find the length of the longest contiguous subarray within arr whose elements sum up to exactly K. If no such subarray exists, return 0.
+*/
